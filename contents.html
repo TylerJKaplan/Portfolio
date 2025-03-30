@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="theme-styles.css">
+<script src="theme-switcher.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Everything - My Portfolio</title>
+    <link rel="stylesheet" href="https://unpkg.com/98.css">
+    <style>
+        body {
+            background-color: #008080; /* Classic teal Windows background */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        
+        .window {
+            width: 600px;
+            height: 450px;
+            position: relative;
+        }
+        
+        .window-body {
+            display: flex;
+            flex-direction: column;
+            height: calc(100% - 58px);
+        }
+        
+        .toolbar {
+            display: flex;
+            padding: 3px;
+            margin-bottom: 10px;
+        }
+        
+        .window-content {
+            flex: 1;
+            overflow: auto;
+            padding: 10px;
+        }
+        
+        .folder-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            padding: 10px;
+        }
+        
+        .folder {
+            width: 75px;
+            height: 80px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            cursor: pointer;
+        }
+        
+        .folder-selected {
+            background-color: rgba(0, 0, 128, 0.2);
+        }
+        
+        .folder-icon {
+            width: 32px;
+            height: 32px;
+            margin-bottom: 5px;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+        
+        .folder-label {
+            font-size: 11px;
+            max-width: 75px;
+            word-wrap: break-word;
+        }
+        
+        .folder-opening {
+            animation: folder-open 0.2s ease-in-out;
+        }
+        
+        @keyframes folder-open {
+            0% { transform: scale(1); }
+            50% { transform: scale(0.9); }
+            100% { transform: scale(1); }
+        }
+        
+        .folder-icon.resume {
+            background-image: url('https://win98icons.alexmeub.com/icons/png/notepad_file-0.png');
+        }
+        
+        .folder-icon.photography {
+            background-image: url('https://win98icons.alexmeub.com/icons/png/camera-0.png');
+        }
+        
+        .folder-icon.design {
+            background-image: url('https://win98icons.alexmeub.com/icons/png/paint_old-0.png');
+        }
+        
+        .menu-bar {
+            display: flex;
+            margin-bottom: 10px;
+        }
+        
+        .menu-bar button {
+            margin-right: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="window">
+        <div class="title-bar">
+            <div class="title-bar-text">Everything</div>
+            <div class="title-bar-controls">
+                <button aria-label="Minimize"></button>
+                <button aria-label="Maximize"></button>
+                <button aria-label="Close" onclick="window.location.href='index.html'"></button>
+            </div>
+        </div>
+        <div class="window-body">
+            <div class="menu-bar">
+                <button class="menu">File</button>
+                <button class="menu">Edit</button>
+                <button class="menu">View</button>
+                <button class="menu">Help</button>
+            </div>
+            
+            <div class="toolbar">
+                <button onclick="window.location.href='index.html'" title="Back">Back</button>
+            </div>
+            
+            <div class="window-content">
+                <div class="folder-container">
+                    <div id="resume-folder" class="folder" onclick="folderClick(this, 'resume.html')">
+                        <div class="folder-icon resume"></div>
+                        <div class="folder-label">Resume</div>
+                    </div>
+                    
+                    <div id="photography-folder" class="folder" onclick="folderClick(this, 'photography.html')">
+                        <div class="folder-icon photography"></div>
+                        <div class="folder-label">Photography</div>
+                    </div>
+                    
+                    <div id="design-folder" class="folder" onclick="folderClick(this, 'graphic-design.html')">
+                        <div class="folder-icon design"></div>
+                        <div class="folder-label">Graphic Design</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="status-bar">
+            <p class="status-bar-field">3 items</p>
+            <p class="status-bar-field"></p>
+            <p class="status-bar-field">Windows 98</p>
+        </div>
+    </div>
+
+    <script>
+        // Folder click functionality
+        let clickCount = 0;
+        let clickTimer;
+        let selectedFolder = null;
+        
+        function folderClick(element, destination) {
+            clickCount++;
+            
+            if (clickCount === 1) {
+                // Clear previous selection if any
+                if (selectedFolder) {
+                    selectedFolder.classList.remove('folder-selected');
+                }
+                
+                // Select current folder
+                element.classList.add('folder-selected');
+                selectedFolder = element;
+                
+                clickTimer = setTimeout(function() {
+                    clickCount = 0;
+                    // Single click action here (select)
+                }, 300);
+            } else {
+                clearTimeout(clickTimer);
+                clickCount = 0;
+                
+                // Double click action - open folder
+                element.classList.add('folder-opening');
+                
+                // Navigate after a short delay for animation
+                setTimeout(function() {
+                    window.location.href = destination;
+                }, 200);
+            }
+        }
+        
+        // Menu functionality
+        document.querySelectorAll('.menu').forEach(button => {
+            button.addEventListener('click', function() {
+                alert(this.textContent + ' menu not implemented in this demo');
+            });
+        });
+    </script>
+</body>
+</html>

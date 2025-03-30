@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="theme-styles.css">
+<script src="theme-switcher.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume - My Portfolio</title>
+    <link rel="stylesheet" href="https://unpkg.com/98.css">
+    <style>
+        body {
+            background-color: #008080; /* Classic teal Windows background */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        
+        .window {
+            width: 650px;
+            height: 500px;
+            position: relative;
+        }
+        
+        .window-body {
+            display: flex;
+            flex-direction: column;
+            height: calc(100% - 58px);
+        }
+        
+        .toolbar {
+            display: flex;
+            padding: 3px;
+            margin-bottom: 10px;
+        }
+        
+        .notepad-content {
+            flex: 1;
+            overflow: auto;
+            padding: 10px;
+            background-color: white;
+            font-family: 'Lucida Console', Monaco, monospace;
+            font-size: 12px;
+            line-height: 1.5;
+            border: 1px inset #d5d5d5;
+            white-space: pre-wrap;
+        }
+        
+        .menu-bar {
+            display: flex;
+            margin-bottom: 10px;
+        }
+        
+        .menu-bar button {
+            margin-right: 5px;
+        }
+        
+        /* Blinking cursor effect */
+        .cursor {
+            display: inline-block;
+            width: 8px;
+            height: 14px;
+            background-color: black;
+            animation: blink 1s step-end infinite;
+        }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="window">
+        <div class="title-bar">
+            <div class="title-bar-text">Resume</div>
+            <div class="title-bar-controls">
+                <button aria-label="Minimize"></button>
+                <button aria-label="Maximize"></button>
+                <button aria-label="Close" onclick="window.location.href='contents.html'"></button>
+            </div>
+        </div>
+        <div class="window-body">
+            <div class="menu-bar">
+                <button class="menu">File</button>
+                <button class="menu">Edit</button>
+                <button class="menu">Search</button>
+                <button class="menu">Help</button>
+            </div>
+            
+            <div class="toolbar">
+                <button onclick="window.location.href='contents.html'" title="Back">Back</button>
+            </div>
+            
+            <div class="notepad-content">
+RESUME
+======================================
+
+<strong>PERSONAL INFORMATION</strong>
+--------------------------------------
+Name: Tyler Kaplan
+Email: tylerjameskaplan@gmail.com
+Phone: (949) 945 3403
+Location: Newport Beach, CA
+
+<strong>PROFESSIONAL SUMMARY</strong>
+--------------------------------------
+Marketing graduate with practical experience in real estate marketing and sales. Strong creative skills demonstrated through designing marketing materials and social media campaigns. Effective communicator who enjoys working with clients and teams. Experienced in conducting market research and turning insights into actionable strategies. Looking to transition into a consumer-facing marketing role where I can apply my creativity, people skills, and work ethic while continuing to grow professionally.
+
+<strong>SKILLS</strong>
+--------------------------------------
+• Marketing & Communication: Campaign Development, Social Media Strategy, Resume Buzzword Creation
+• Project Management: Calendar Management, CRM Tools, Cross-Functional Team Collaboration
+• Creative Tools: Adobe Suite, Photography, Videography, Copywriting, Sublime
+• Technical Skills: Microsoft Excel, Google Analytics, Salesforce
+
+<strong>EXPERIENCE</strong>
+--------------------------------------
+<strong>Marketing & Sales Associate</strong>
+CBRE | Phoenix, AZ | Summer 2023
+
+• Designed marketing materials, including photos, graphics, brochures, pitch decks, and emails, supporting go-to-market campaigns and sales initiatives
+• Prospected over 500 businesses to generate leads and enrich CRM data, driving actionable insights for the team
+• Identified underperforming properties and presented a comprehensive marketing strategy to over 50 employees,
+resulting in a successful lease
+• Compiled client surveys, transforming complex data into clear deliverables for brokers and clients
+• Conducted property tours, leveraging strategic insights to align client needs with available spaces
+
+<strong>Marketing Intern</strong>
+Arbor Real Estate | Newport Beach, CA | Summer 2022
+
+•  Created marketing campaigns and promotional materials, increasing agent visibility and attracting new clients
+• Designed and implemented a robust social media strategy, boosting engagement and driving sales inquiries
+• Conducted market research on consumer behavior during economic shifts; presented actionable insights and
+solutions to agents
+• Prepared competitive pricing analyses and property valuations to enhance listing accuracy and competitiveness
+
+<strong>Digital Marketing Intern</strong>
+Bluon Energy | Irvine, CA | Summer 2020
+• Curated and developed digital content to support marketing campaigns, increasing brand awareness.
+• Conducted market research to identify potential B2B clients, enabling targeted lead generation strategies.
+• Provided administrative and strategic support to the VP of Operations, contributing to key business initiatives
+
+<strong>EDUCATION</strong>
+--------------------------------------
+<strong>BBA in Marketing and Real Estate Urban Land Economics</strong>
+University of Wisconsin | May 2024 | GPA: 3.5
+
+• Relevant Coursework: Emerging Trends in Digital Media, Marketing Research, Business Analytics
+• Advertising Club: Designed integrated marketing campaigns and collaborated with industry professionals to enhance creative strategies for local Madison based businesses
+• Real Estate Club: Participated in educational speaking engagements and networking events; attended trips to explore regional market trends and speak with industry professionals
+• Wall Street & Waffles: Founded a financial literacy club, fostering peer engagement while enjoying the most important meal of the day
+
+<strong>Additional Experience</strong>
+--------------------------------------
+<strong>Professional Meat Slinger</strong>
+The Butchery | Costa Mesa, CA | February 2025-Present
+
+<strong>Seasonal Delivery Driver (Santa Clause)</strong>
+United States Parcel Service | Newport Beach, CA | December 2024
+
+<strong>Young Stud Pool Boy</strong>
+The Hyatt Regency | Huntington Beach, CA | Summer 2021 
+
+======================================
+Last Updated: [3/25]<span class="cursor"></span>
+            </div>
+        </div>
+        <div class="status-bar">
+            <p class="status-bar-field">Press F1 for help</p>
+            <p class="status-bar-field"></p>
+            <p class="status-bar-field">Windows 98</p>
+        </div>
+    </div>
+
+    <script>
+        // Menu functionality
+        document.querySelectorAll('.menu').forEach(button => {
+            button.addEventListener('click', function() {
+                alert(this.textContent + ' menu not implemented in this demo');
+            });
+        });
+    </script>
+</body>
+</html>

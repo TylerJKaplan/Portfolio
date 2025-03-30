@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="theme-styles.css">
+<script src="theme-switcher.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Graphic Design</title>
+    <link rel="stylesheet" href="https://unpkg.com/98.css">
+    <style>
+        /* Base Windows 98 Styling */
+        body {
+            background-color: #008080; /* Classic teal Windows background */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: 'MS Sans Serif', 'Segoe UI', Tahoma, sans-serif;
+        }
+        
+        .window {
+            width: 700px;
+            height: 520px;
+            position: relative;
+        }
+        
+        .window-body {
+            height: calc(100% - 58px);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden; /* Prevent overflow */
+            position: relative;
+        }
+        
+        /* MS Paint specific elements */
+        .paint-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            border: 1px inset #d5d5d5;
+            background-color: #c0c0c0;
+            overflow: hidden; /* Prevent overflow */
+            position: relative;
+        }
+        
+        .paint-toolbar {
+            display: flex;
+            flex-direction: column;
+            border-bottom: 1px solid #a0a0a0;
+            background-color: #c0c0c0;
+            padding: 4px;
+        }
+        
+        .toolbar-row {
+            display: flex;
+            margin-bottom: 3px;
+        }
+        
+        .tool-section {
+            display: flex;
+            flex-wrap: wrap;
+            border: 1px solid #808080;
+            padding: 2px;
+            margin-right: 5px;
+            background-color: #c0c0c0;
+            box-shadow: inset 1px 1px 0 #ffffff, inset -1px -1px 0 #808080;
+        }
+        
+        .tool-button {
+            width: 25px;
+            height: 25px;
+            border: 1px outset #d5d5d5;
+            background-color: #c0c0c0;
+            margin: 1px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+        
+        .tool-button:active, .tool-button.active {
+            border: 1px inset #d5d5d5;
+            background-color: #b0b0b0;
+        }
+        
+        .color-bar {
+            display: flex;
+            margin-top: 4px;
+            height: 36px;
+            border: 1px solid #808080;
+            box-shadow: inset 1px 1px 0 #ffffff, inset -1px -1px 0 #808080;
+            padding: 2px;
+        }
+        
+        .color-active {
+            position: relative;
+            width: 60px;
+            height: 30px;
+            border: 1px inset #d5d5d5;
+            margin-right: 4px;
+            display: flex;
+        }
+        
+        .color-primary {
+            width: 30px;
+            height: 15px;
+            background-color: #000000;
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            border: 1px solid #808080;
+            z-index: 2;
+        }
+        
+        .color-secondary {
+            width: 30px;
+            height: 15px;
+            background-color: #ffffff;
+            position: absolute;
+            bottom: 2px;
+            right: 2px;
+            border: 1px solid #808080;
+            z-index: 1;
+        }
+        
+        .color-palette {
+            display: flex;
+            flex-wrap: wrap;
+            flex: 1;
+        }
+        
+        .color-swatch {
+            width: 15px;
+            height: 15px;
+            border: 1px outset #d5d5d5;
+            margin: 0 1px 1px 0;
+            cursor: pointer;
+        }
+        
+        .color-swatch:active {
+            border: 1px inset #d5d5d5;
+        }
+        
+        /* Canvas and design gallery area */
+        .paint-canvas {
+            flex: 1;
+            position: relative;
+            background-color: #ffffff;
+            border: 1px inset #d5d5d5;
+            margin: 5px;
+            overflow: hidden; /* Prevent overflow */
+            height: calc(100% - 110px); /* Account for toolbar height */
+        }
+        
+        .design-gallery {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            overflow-y: auto; /* Add vertical scrollbar */
+            overflow-x: hidden; /* Hide horizontal overflow */
+        }
+        
+        .design-item {
+            border: 1px solid #d5d5d5;
+            padding: 10px;
+            background-color: #f5f5f5;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            margin-bottom: 5px;
+            flex-shrink: 0; /* Prevent shrinking */
+        }
+        
+        .design-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            border-color: #0000aa;
+        }
+        
+        .design-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+        
+        .design-description {
+            font-size: 12px;
+            margin-bottom: 10px;
+        }
+        
+        .design-image {
+            width: 100%;
+            height: 200px;
+            background-color: #e0e0e0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+        
+        .design-image img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+        
+        .design-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-top: 5px;
+        }
+        
+        .design-tag {
+            font-size: 10px;
+            background-color: #e0e0e0;
+            padding: 2px 6px;
+            border: 1px solid #d5d5d5;
+        }
+        
+        /* Project detail dialog */
+        .project-dialog {
+            display: none;
+            position: fixed;
+            z-index: 100;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .project-dialog.active {
+            display: flex;
+        }
+        
+        .project-window {
+            width: 650px;
+            height: 480px;
+            background-color: #c0c0c0;
+            border: 2px outset #d5d5d5;
+        }
+        
+        .project-content {
+            padding: 10px;
+            height: calc(100% - 58px);
+            overflow-y: auto;
+            background-color: #ffffff;
+        }
+        
+        .project-details {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .project-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .project-thumbnail {
+            width: 120px;
+            height: 120px;
+            border: 1px solid #808080;
+            object-fit: cover;
+        }
+        
+        .project-info {
+            flex: 1;
+        }
+        
+        .project-gallery {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        /* Modified gallery image style to preserve aspect ratio */
+        .gallery-image {
+            width: calc(33.333% - 10px);
+            height: auto;
+            border: 1px solid #d5d5d5;
+            object-fit: contain;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+        
+        .gallery-image:hover {
+            transform: scale(1.02);
+            border-color: #0000aa;
+        }
+        
+        /* Image viewer dialog */
+        .image-viewer {
+            display: none;
+            position: fixed;
+            z-index: 200;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .image-viewer.active {
+            display: flex;
+        }
+        
+        .image-viewer-window {
+            width: 80%;
+            max-width: 800px;
+            height: 80%;
+            max-height: 600px;
+            background-color: #c0c0c0;
+            border: 2px outset #d5d5d5;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .image-viewer-content {
+            flex: 1;
+            background-color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: auto;
+            padding: 10px;
+        }
+        
+        .image-viewer-content img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+        
+        /* Image counter display */
+        .image-counter {
+            margin-left: 10px;
+            font-size: 11px;
+            color: #000080;
+        }
+    </style>
+</head>
+<body>
+    <div class="window">
+        <div class="title-bar">
+            <div class="title-bar-text">Graphic Design</div>
+            <div class="title-bar-controls">
+                <button aria-label="Minimize"></button>
+                <button aria-label="Maximize"></button>
+                <button aria-label="Close" onclick="window.location.href='contents.html'"></button>
+            </div>
+        </div>
+        <div class="window-body">
+            <div class="toolbar" style="margin-bottom: 5px">
+                <button onclick="window.location.href='contents.html'">Back</button>
+            </div>
+            
+            <div class="paint-container">
+                <div class="paint-toolbar">
+                    <div class="toolbar-row">
+                        <div class="tool-section">
+                            <!-- Simplified toolbar with fewer buttons -->
+                            <div class="tool-button" title="Pencil">✏️</div>
+                            <div class="tool-button active" title="Brush">🖌️</div>
+                            <div class="tool-button" title="Eraser">🧽</div>
+                            <div class="tool-button" title="Fill">🪣</div>
+                            <div class="tool-button" title="Text">T</div>
+                            <div class="tool-button" title="Line">📏</div>
+                            <div class="tool-button" title="Rectangle">◻️</div>
+                            <div class="tool-button" title="Ellipse">⭕</div>
+                        </div>
+                    </div>
+                    
+                    <div class="toolbar-row">
+                        <div class="tool-section" style="width: 120px;">
+                            <div class="tool-button" title="Thin Line">
+                                <div style="width: 10px; height: 1px; background-color: black;"></div>
+                            </div>
+                            <div class="tool-button" title="Medium Line">
+                                <div style="width: 10px; height: 2px; background-color: black;"></div>
+                            </div>
+                            <div class="tool-button active" title="Thick Line">
+                                <div style="width: 10px; height: 3px; background-color: black;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="color-bar">
+                        <div class="color-active">
+                            <div class="color-primary"></div>
+                            <div class="color-secondary"></div>
+                        </div>
+                        <div class="color-palette">
+                            <div class="color-swatch" style="background-color: #000000;"></div>
+                            <div class="color-swatch" style="background-color: #808080;"></div>
+                            <div class="color-swatch" style="background-color: #800000;"></div>
+                            <div class="color-swatch" style="background-color: #808000;"></div>
+                            <div class="color-swatch" style="background-color: #008000;"></div>
+                            <div class="color-swatch" style="background-color: #008080;"></div>
+                            <div class="color-swatch" style="background-color: #000080;"></div>
+                            <div class="color-swatch" style="background-color: #800080;"></div>
+                            <div class="color-swatch" style="background-color: #FFFFFF;"></div>
+                            <div class="color-swatch" style="background-color: #C0C0C0;"></div>
+                            <div class="color-swatch" style="background-color: #FF0000;"></div>
+                            <div class="color-swatch" style="background-color: #FFFF00;"></div>
+                            <div class="color-swatch" style="background-color: #00FF00;"></div>
+                            <div class="color-swatch" style="background-color: #00FFFF;"></div>
+                            <div class="color-swatch" style="background-color: #0000FF;"></div>
+                            <div class="color-swatch" style="background-color: #FF00FF;"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="paint-canvas">
+                    <div class="design-gallery" id="designGallery">
+                        <!-- Design projects will be added here by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="status-bar">
+            <p class="status-bar-field"><span id="project-count">3 projects</span></p>
+            <p class="status-bar-field"></p>
+            <p class="status-bar-field">Windows 98</p>
+        </div>
+    </div>
+    
+    <!-- Project Detail Dialog -->
+    <div class="project-dialog" id="projectDialog">
+        <div class="project-window">
+            <div class="title-bar">
+                <div class="title-bar-text" id="projectDialogTitle">Project Details</div>
+                <div class="title-bar-controls">
+                    <button aria-label="Close" onclick="closeProjectDialog()"></button>
+                </div>
+            </div>
+            <div class="window-body" style="height: calc(100% - 28px); overflow: hidden;">
+                <div class="toolbar">
+                    <button onclick="closeProjectDialog()">Back</button>
+                </div>
+                <div class="project-content" id="projectContent">
+                    <!-- Project details will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Image Viewer Dialog -->
+    <div class="image-viewer" id="imageViewer">
+        <div class="image-viewer-window">
+            <div class="title-bar">
+                <div class="title-bar-text">Image Viewer</div>
+                <div class="title-bar-controls">
+                    <button aria-label="Close" onclick="closeImageViewer()"></button>
+                </div>
+            </div>
+            <div class="toolbar">
+                <button onclick="closeImageViewer()">Close</button>
+                <span style="margin-left: 20px; font-size: 11px;">Use ← → arrow keys to navigate</span>
+                <span id="imageCounter" class="image-counter"></span>
+            </div>
+            <div class="image-viewer-content" id="imageViewerContent">
+                <!-- The enlarged image will be displayed here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Improved project data with individual galleries
+        const projects = [
+            {
+                id: 1,
+                title: "Brand Identity Design",
+                description: "A complete brand identity package including logo, color scheme, typography, and brand guidelines.",
+                thumbnail: "images/shaped thumbnail.png", // Replace with your actual thumbnail
+                tags: ["Branding", "Logo Design", "Typography"],
+                fullDescription: "This brand identity was created for my personal brand which offers pro-bono marketing services to local businesses in order to build my portfolio and help shape my community.",
+                client: "Shaped Creative",
+                galleryImages: [
+                    "images/Shaped testing Brand guide-01.png", // Replace with your actual images
+                    "images/Shaped testing Brand guide-02.png", 
+                    "images/Shaped testing Brand guide-03.png",
+                    "images/Shaped testing Brand guide-04.png",
+                    "images/Shaped testing Brand guide-05.png",
+                    "images/Shaped testing Brand guide-06.png",
+                    "images/Shaped testing Brand guide-07.png",
+                    "images/Shaped testing Brand guide-09.png",
+                    "images/Shaped testing Brand guide-11.png",
+                    "images/Shaped testing Brand guide-14.png",
+                    "images/Shaped testing Brand guide-13.png",
+                    "images/Shaped testing photo-04.png",
+                    "images/Shaped testing photo-01.png",
+
+                ]
+            },
+            {
+                id: 2,
+                title: "Photography in motion",
+                description: "A series of gifs creating looping graphics layered with my photography",
+                thumbnail: "images/tunnel-02.gif", // Replace with your actual thumbnail
+                tags: ["Poster", "Print Design", "Illustration"],
+                fullDescription: "A series of gifs creating looping graphics layered with my photography",
+                client: "Me",
+                galleryImages: [
+                    "images/tunnel-02.gif",
+                    "images/tunnel-03.gif",
+                    "images/tunnel-04.gif",
+                    "images/tunnel-05.gif",
+                    "images/tunnel-06.gif",
+                ]
+            },
+            {
+                id: 3,
+                title: "Brand Identity Design",
+                description: "A full brand identity created for a local Hawaiian Shirt Store.",
+                thumbnail: "images/dirt cheap logo.png", // Replace with your actual thumbnail
+                tags: ["Print Design", "Branding", "Logo Design"],
+                fullDescription: "Developed a complete brand identity for a local Hawaiian shirt store that previously relied solely on word-of-mouth marketing. Created a cohesive visual and messaging strategy, including a flyer campaign, refreshed social media presence, and original content to enhance engagement and attract new customers.",
+                client: "Nik Wassilew",
+                galleryImages: [
+                    "images/dirt cheap-01.png",
+                    "images/dirt cheap-02.png",
+                    "images/dirt cheap-03.png",
+                    "images/dirt cheap-04.png",
+                    "images/dirt cheap-05.png",
+                    "images/dirt cheap-06.png",
+                    "images/dirt cheap-07.png",
+                    "images/dirt cheap-08.png",
+                    "images/dirt cheap-09.png",
+                    "images/dirt cheap-10.png",
+                    "images/dirt cheap-11.png",
+                    "images/dirt cheap-12.png",
+                    "images/dirt cheap-13.png",
+                    "images/dirt cheap-14.png",
+                    "images/dirt cheap-15.png",
+                    "images/dirt cheap-16.png",
+                    "images/dirt cheap-17.png",
+                    "images/dirt cheap-18.png",
+                ]
+            },
+            {
+                id: 4,
+                title: "UI/UX Design Project",
+                description: "User interface design for web browser",
+                thumbnail: "images/ui.png", // Replace with your actual thumbnail
+                tags: ["UI/UX", "Web Design", "HTML"],
+                fullDescription: "This Website. The one you are looking at right now. Cmon, it's pretty fun.",
+                client: "Tyler Kaplan Portfolio Inc.",
+                galleryImages: [
+                    "images/ui.png",
+                    
+                ]
+            }
+        ];
+        
+        // Variables to track current image viewing state
+        let currentProject = null;
+        let currentImageIndex = 0;
+        
+        // Display projects when page loads
+        window.addEventListener('load', function() {
+            const gallery = document.getElementById('designGallery');
+            
+            // Create HTML for each project
+            projects.forEach(project => {
+                const projectItem = document.createElement('div');
+                projectItem.className = 'design-item';
+                projectItem.onclick = function() { openProjectDialog(project); };
+                
+                projectItem.innerHTML = `
+                    <div class="design-title">${project.title}</div>
+                    <div class="design-description">${project.description}</div>
+                    <div class="design-image">
+                        <img src="${project.thumbnail}" alt="${project.title}">
+                    </div>
+                    <div class="design-tags">
+                        ${project.tags.map(tag => `<div class="design-tag">${tag}</div>`).join('')}
+                    </div>
+                `;
+                
+                gallery.appendChild(projectItem);
+            });
+        });
+        
+        // Show project details with project-specific gallery
+        function openProjectDialog(project) {
+            const dialog = document.getElementById('projectDialog');
+            const title = document.getElementById('projectDialogTitle');
+            const content = document.getElementById('projectContent');
+            
+            title.textContent = project.title;
+            
+            // Create HTML for the gallery using this project's specific images
+            const galleryHTML = project.galleryImages.map((img, index) => 
+                `<img src="${img}" alt="${project.title} image" class="gallery-image" onclick="openImageViewer('${project.id}', ${index})">`
+            ).join('');
+            
+            content.innerHTML = `
+                <div class="project-details">
+                    <div class="project-header">
+                        <img src="${project.thumbnail}" alt="${project.title}" class="project-thumbnail">
+                        <div class="project-info">
+                            <h2 style="color: #000080;">${project.title}</h2>
+                            <p><strong>Client:</strong> ${project.client}</p>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <p>${project.fullDescription}</p>
+                    </div>
+                    
+                    <h3>Project Gallery</h3>
+                    <div class="project-gallery">
+                        ${galleryHTML}
+                    </div>
+                </div>
+            `;
+            
+            dialog.classList.add('active');
+        }
+        
+        function closeProjectDialog() {
+            const dialog = document.getElementById('projectDialog');
+            dialog.classList.remove('active');
+        }
+        
+        // Image viewer functionality with keyboard navigation only
+        function openImageViewer(projectId, imageIndex) {
+            const viewer = document.getElementById('imageViewer');
+            const content = document.getElementById('imageViewerContent');
+            
+            // Find the project and set current viewing state
+            currentProject = projects.find(p => p.id == projectId);
+            currentImageIndex = imageIndex;
+            
+            // Display the image
+            displayCurrentImage();
+            
+            // Show the viewer
+            viewer.classList.add('active');
+            
+            // Add keyboard event listener
+            document.addEventListener('keydown', handleKeyNavigation);
+        }
+        
+        function closeImageViewer() {
+            const viewer = document.getElementById('imageViewer');
+            viewer.classList.remove('active');
+            
+            // Remove keyboard event listener
+            document.removeEventListener('keydown', handleKeyNavigation);
+        }
+        
+        function displayCurrentImage() {
+            const content = document.getElementById('imageViewerContent');
+            const counter = document.getElementById('imageCounter');
+            
+            if (currentProject && currentProject.galleryImages) {
+                // Keep index within bounds
+                if (currentImageIndex < 0) {
+                    currentImageIndex = currentProject.galleryImages.length - 1;
+                } else if (currentImageIndex >= currentProject.galleryImages.length) {
+                    currentImageIndex = 0;
+                }
+                
+                // Display current image
+                content.innerHTML = `<img src="${currentProject.galleryImages[currentImageIndex]}" alt="Image ${currentImageIndex + 1} of ${currentProject.galleryImages.length}">`;
+                
+                // Update image counter if there are multiple images
+                if (currentProject.galleryImages.length > 1) {
+                    counter.textContent = `Image ${currentImageIndex + 1} of ${currentProject.galleryImages.length}`;
+                } else {
+                    counter.textContent = '';
+                }
+            }
+        }
+        
+        function navigateImage(direction) {
+            // Navigate to next/previous image
+            currentImageIndex += direction;
+            displayCurrentImage();
+        }
+        
+        // Keyboard navigation
+        function handleKeyNavigation(event) {
+            if (document.getElementById('imageViewer').classList.contains('active')) {
+                if (event.key === 'ArrowLeft') {
+                    navigateImage(-1);
+                    event.preventDefault();
+                } else if (event.key === 'ArrowRight') {
+                    navigateImage(1);
+                    event.preventDefault();
+                } else if (event.key === 'Escape') {
+                    closeImageViewer();
+                    event.preventDefault();
+                }
+            }
+        }
+        
+        // MS Paint UI interactions - simplified
+        document.querySelectorAll('.tool-button').forEach(button => {
+            button.addEventListener('click', function() {
+                // Remove active state from all buttons in the same section
+                this.parentElement.querySelectorAll('.tool-button').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                
+                // Add active state to clicked button
+                this.classList.add('active');
+            });
+        });
+        
+        document.querySelectorAll('.color-swatch').forEach(swatch => {
+            swatch.addEventListener('click', function() {
+                const color = this.style.backgroundColor;
+                document.querySelector('.color-primary').style.backgroundColor = color;
+            });
+            
+            // Right click for secondary color
+            swatch.addEventListener('contextmenu', function(e) {
+                e.preventDefault();
+                const color = this.style.backgroundColor;
+                document.querySelector('.color-secondary').style.backgroundColor = color;
+                return false;
+            });
+        });
+    </script>
+</body>
+</html>

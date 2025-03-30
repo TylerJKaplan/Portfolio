@@ -1,0 +1,174 @@
+/* Theme System for Windows 98 Portfolio
+ * Save this file as 'theme-styles.css' in your project folder
+ */
+
+/* Theme Variables */
+:root {
+    /* Default Windows 98 Theme */
+    --background-color: #008080;
+    --window-bg: #c0c0c0;
+    --window-border: #ffffff #808080 #808080 #ffffff;
+    --title-bar-bg: linear-gradient(to right, #000080, #1084d0);
+    --title-bar-text: #ffffff;
+    --content-bg: #ffffff;
+    --text-color: #000000;
+    --highlight-color: #000080;
+    --button-face: #c0c0c0;
+    --button-highlight: #ffffff;
+    --button-shadow: #808080;
+    --menu-bg: #c0c0c0;
+    --menu-text: #000000;
+    --menu-hover-bg: #000080;
+    --menu-hover-text: #ffffff;
+    --scrollbar-face: #c0c0c0;
+    --scrollbar-shadow: #808080;
+    --scrollbar-highlight: #ffffff;
+    --theme-image: none;
+}
+
+/* Windows XP Theme */
+.theme-xp {
+    --background-color: #3a6ea5;
+    --window-bg: #ece9d8;
+    --window-border: #0054e3 #0054e3 #0054e3 #0054e3;
+    --title-bar-bg: linear-gradient(to right, #0a246a, #a6caf0);
+    --title-bar-text: #ffffff;
+    --content-bg: #ece9d8;
+    --text-color: #000000;
+    --highlight-color: #0a246a;
+    --button-face: #ece9d8;
+    --button-highlight: #ffffff;
+    --button-shadow: #aca899;
+    --menu-bg: #ece9d8;
+    --menu-text: #000000;
+    --menu-hover-bg: #316ac5;
+    --menu-hover-text: #ffffff;
+    --scrollbar-face: #ece9d8;
+    --scrollbar-shadow: #aca899;
+    --scrollbar-highlight: #ffffff;
+    --theme-image: url('images/themes/windows_xp.jpg');
+}
+
+/* Windows 3.1 Theme */
+.theme-win31 {
+    --background-color: #008080;
+    --window-bg: #c0c0c0;
+    --window-border: #ffffff #000000 #000000 #ffffff;
+    --title-bar-bg: #000080;
+    --title-bar-text: #ffffff;
+    --content-bg: #ffffff;
+    --text-color: #000000;
+    --highlight-color: #800000;
+    --button-face: #c0c0c0;
+    --button-highlight: #ffffff;
+    --button-shadow: #000000;
+    --menu-bg: #c0c0c0;
+    --menu-text: #000000;
+    --menu-hover-bg: #000080;
+    --menu-hover-text: #ffffff;
+    --scrollbar-face: #c0c0c0;
+    --scrollbar-shadow: #000000;
+    --scrollbar-highlight: #ffffff;
+    --theme-image: url('images/themes/hardsell.jpg');
+}
+
+/* Dark Theme */
+.theme-dark {
+    --background-color: #222222;
+    --window-bg: #333333;
+    --window-border: #444444 #111111 #111111 #444444;
+    --title-bar-bg: #111111;
+    --title-bar-text: #ffffff;
+    --content-bg: #383838;
+    --text-color: #e0e0e0;
+    --highlight-color: #0078d7;
+    --button-face: #444444;
+    --button-highlight: #555555;
+    --button-shadow: #222222;
+    --menu-bg: #333333;
+    --menu-text: #e0e0e0;
+    --menu-hover-bg: #0078d7;
+    --menu-hover-text: #ffffff;
+    --scrollbar-face: #444444;
+    --scrollbar-shadow: #222222;
+    --scrollbar-highlight: #555555;
+    --theme-image: none;
+}
+
+/* Apply theme to elements */
+body {
+    background-color: var(--background-color);
+    color: var(--text-color);
+}
+
+body::after {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background-image: var(--theme-image);
+    background-size: cover;
+    background-position: center;
+    opacity: 0.8;
+}
+
+.window {
+    background-color: var(--window-bg);
+    border-color: var(--button-highlight) var(--button-shadow) var(--button-shadow) var(--button-highlight);
+}
+
+.title-bar {
+    background: var(--title-bar-bg);
+    color: var(--title-bar-text);
+}
+
+.window-body, .paint-container {
+    background-color: var(--window-bg);
+}
+
+.paint-canvas, .project-content, .image-viewer-content {
+    background-color: var(--content-bg);
+}
+
+button, .tool-button {
+    background-color: var(--button-face);
+    border-color: var(--button-highlight) var(--button-shadow) var(--button-shadow) var(--button-highlight);
+    color: var(--text-color);
+}
+
+.design-item {
+    background-color: var(--content-bg);
+    border-color: var(--button-shadow);
+}
+
+.design-item:hover {
+    border-color: var(--highlight-color);
+}
+
+h2, h3 {
+    color: var(--highlight-color);
+}
+
+/* Theme selector dropdown styling */
+.theme-selector {
+    position: absolute;
+    top: 5px;
+    Left: 10px;
+    z-index: 1000;
+    background-color: var(--window-bg);
+    border: 1px solid;
+    border-color: var(--button-highlight) var(--button-shadow) var(--button-shadow) var(--button-highlight);
+    padding: 3px;
+    font-size: 11px;
+}
+
+.theme-selector select {
+    background-color: var(--content-bg);
+    color: var(--text-color);
+    border: 1px solid var(--button-shadow);
+    font-size: 11px;
+    font-family: 'MS Sans Serif', sans-serif;
+}

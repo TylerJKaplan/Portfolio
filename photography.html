@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="theme-styles.css">
+<script src="theme-switcher.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Photography - My Portfolio</title>
+    <link rel="stylesheet" href="https://unpkg.com/98.css">
+    <style>
+        /* Base Windows 98 Styling */
+        body {
+            background-color: #008080; /* Classic teal Windows background */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: 'MS Sans Serif', 'Segoe UI', Tahoma, sans-serif;
+        }
+        
+        .window {
+            width: 700px;
+            height: 500px;
+            position: relative;
+        }
+        
+        .window-body {
+            position: absolute;
+            top: 28px; /* Title bar height */
+            left: 0;
+            right: 0;
+            bottom: 30px; /* Status bar height */
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .menu-bar {
+            display: flex;
+            margin-bottom: 10px;
+        }
+        
+        .menu-bar button {
+            margin-right: 5px;
+        }
+        
+        .toolbar {
+            display: flex;
+            padding: 3px;
+            margin-bottom: 10px;
+        }
+        
+        /* Critical Scrolling Container */
+        .explorer-content {
+            flex: 1;
+            display: flex;
+            border: 1px inset #d5d5d5;
+            background-color: white;
+            position: relative;
+            height: calc(100% - 80px); /* Account for menu and toolbar */
+        }
+        
+        .folder-tree {
+            width: 150px;
+            padding: 10px;
+            border-right: 1px solid #d5d5d5;
+            background-color: white;
+            overflow-y: scroll;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+        }
+        
+        .gallery-container {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 160px; /* Account for folder tree width */
+            right: 0;
+            overflow-y: scroll; /* Force scroll */
+            background-color: white;
+        }
+        
+        .gallery {
+            display: flex;
+            flex-wrap: wrap;
+            padding: 10px;
+            gap: 15px;
+        }
+        
+        .folder-item {
+            display: flex;
+            align-items: center;
+            padding: 2px 0;
+            cursor: pointer;
+            margin-bottom: 5px;
+        }
+        
+        .folder-item img {
+            margin-right: 5px;
+            width: 16px;
+            height: 16px;
+        }
+        
+        .folder-item.selected {
+            background-color: #0000aa;
+            color: white;
+        }
+        
+        /* Modern Enhancements */
+        .photo-item {
+            width: 140px;
+            height: 140px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            margin-bottom: 20px;
+            perspective: 1000px;
+        }
+        
+        .photo-thumbnail {
+            width: 120px;
+            height: 120px;
+            position: relative;
+            transition: transform 0.6s ease;
+            transform-style: preserve-3d;
+            overflow: hidden;
+            border: 1px solid #d5d5d5;
+            background-color: #f0f0f0;
+        }
+        
+        .photo-thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .photo-label {
+            font-size: 11px;
+            margin-top: 5px;
+            max-width: 135px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            text-shadow: 1px 1px 0 white;
+            transition: opacity 0.3s ease;
+        }
+        
+        /* Modern Hover Effects */
+        .photo-item:hover {
+            transform: translateY(-5px);
+            z-index: 10;
+        }
+        
+        .photo-item:hover .photo-thumbnail {
+            border-color: #0078D7;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        
+        .photo-item:hover .photo-thumbnail img {
+            transform: scale(1.1);
+        }
+        
+        /* Photo Dialog - Modern Styling */
+        .photo-dialog {
+            display: none;
+            position: fixed;
+            z-index: 100;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+            backdrop-filter: blur(5px);
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        
+        .photo-dialog.active {
+            display: flex;
+            animation: fadeIn 0.3s forwards;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .photo-dialog-window {
+            width: 550px;
+            background-color: #c0c0c0;
+            border: 2px outset #d5d5d5;
+            transform: scale(0.9);
+            opacity: 0;
+            transition: transform 0.4s ease, opacity 0.4s ease;
+        }
+        
+        .photo-dialog.active .photo-dialog-window {
+            transform: scale(1);
+            opacity: 1;
+        }
+        
+        .photo-dialog-content {
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: white;
+        }
+        
+        .photo-dialog-content img {
+            max-width: 100%;
+            max-height: 400px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transition: transform 0.5s ease;
+        }
+        
+        .photo-info {
+            margin-top: 15px;
+            font-size: 14px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.4;
+            text-align: center;
+            color: #333;
+        }
+        
+        /* Standard Loading Spinner */
+        .loading-spinner {
+            border: 3px solid rgba(0,0,0,0.1);
+            border-top: 3px solid #000080;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Status bar at bottom */
+        .status-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 28px;
+        }
+    </style>
+</head>
+<body>
+    <div class="window">
+        <div class="title-bar">
+            <div class="title-bar-text">Photography</div>
+            <div class="title-bar-controls">
+                <button aria-label="Minimize"></button>
+                <button aria-label="Maximize"></button>
+                <button aria-label="Close" onclick="window.location.href='contents.html'"></button>
+            </div>
+        </div>
+        <div class="window-body">
+            <div class="menu-bar">
+                <button class="menu">File</button>
+                <button class="menu">Edit</button>
+                <button class="menu">View</button>
+                <button class="menu">Help</button>
+            </div>
+            
+            <div class="toolbar">
+                <button onclick="window.location.href='contents.html'" title="Back">Back</button>
+            </div>
+            
+            <div class="explorer-content">
+                <div class="folder-tree">
+                    <div class="folder-item selected" data-category="all">
+                        <img src="https://win98icons.alexmeub.com/icons/png/directory_open_file_mydocs-4.png" alt="Folder">
+                        <span>All Photos</span>
+                    </div>
+                    <div class="folder-item" data-category="landscapes">
+                        <img src="https://win98icons.alexmeub.com/icons/png/directory_closed-0.png" alt="Folder">
+                        <span>Landscapes</span>
+                    </div>
+                    <div class="folder-item" data-category="portraits">
+                        <img src="https://win98icons.alexmeub.com/icons/png/directory_closed-0.png" alt="Folder">
+                        <span>Portraits</span>
+                    </div>
+                    <div class="folder-item" data-category="street">
+                        <img src="https://win98icons.alexmeub.com/icons/png/directory_closed-0.png" alt="Folder">
+                        <span>Street</span>
+                    </div>
+                    <div class="folder-item" data-category="architecture">
+                        <img src="https://win98icons.alexmeub.com/icons/png/directory_closed-0.png" alt="Folder">
+                        <span>Architecture</span>
+                    </div>
+                </div>
+                
+                <div class="gallery-container">
+                    <div class="gallery" id="photoGallery">
+                        <!-- Loading indicator -->
+                        <div class="loading-spinner" id="loadingSpinner"></div>
+                        <!-- Photos will be added here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="status-bar">
+            <p class="status-bar-field"><span id="photo-count">Loading...</span></p>
+            <p class="status-bar-field"></p>
+            <p class="status-bar-field">Windows 98</p>
+        </div>
+    </div>
+    
+    <!-- Photo Dialog -->
+    <div class="photo-dialog" id="photoDialog">
+        <div class="photo-dialog-window">
+            <div class="title-bar">
+                <div class="title-bar-text" id="photoDialogTitle">Photo Viewer</div>
+                <div class="title-bar-controls">
+                    <button aria-label="Close" onclick="closePhotoDialog()"></button>
+                </div>
+            </div>
+            <div class="photo-dialog-content" id="photoDialogContent">
+                <!-- Photo will be displayed here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Simulated photo data - replace with your actual photos
+        const photoData = [
+            { 
+                id: 1, 
+                name: "img1.jpg", 
+                category: "landscapes", 
+                description: "A sufer viewing a passing helicopter",
+                image: "images/simon.png" // Replace with your actual image path
+            },
+            { 
+                id: 2, 
+                name: "img2.jpg", 
+                category: "landscapes", 
+                description: "A view of the pier on a foggy day",
+                image: "images/foggy.pier.png" 
+            },
+            { 
+                id: 3, 
+                name: "img3.jpg", 
+                category: "landscapes", 
+                description: "Beautiful sunset off the Oregon Coast",
+                image: "images/sunset.png" 
+            },
+            { 
+                id: 4, 
+                name: "img4.jpg", 
+                category: "landscapes", 
+                description: "Fisherman on the pier",
+                image: "images/fisherman.png" 
+            },
+            { 
+                id: 5, 
+                name: "img5.jpg", 
+                category: "landscapes", 
+                description: "Los Angeles skyline from Chavez Ravine",
+                image: "images/LA Skyline.png" 
+            },
+            { 
+                id: 6, 
+                name: "img6.jpg", 
+                category: "Street", 
+                description: "Dodger's Win!",
+                image: "images/dodger.celebration.png" 
+            },
+            { 
+                id: 7, 
+                name: "img7.jpg", 
+                category: "street", 
+                description: "View of dodger stadium",
+                image: "images/dodger's.tunnel.png" 
+            },
+            { 
+                id: 8, 
+                name: "img8.jpg", 
+                category: "landscapes", 
+                description: "Surfer approaching the waves",
+                image: "images/chaser.surf.png" 
+            },
+            { 
+                id: 9, 
+                name: "img9.jpg", 
+                category: "portraits", 
+                description: "My Dawg",
+                image: "images/tower.png" 
+            },
+            { 
+                id: 10, 
+                name: "img10.jpg", 
+                category: "architecture", 
+                description: "A nice church",
+                image: "images/church.png" 
+            },
+            { 
+                id: 11, 
+                name: "img11.jpg", 
+                category: "street", 
+                description: "Some take life fast. Others slow",
+                image: "images/biker.hess.png" 
+            },
+            { 
+                id: 12, 
+                name: "img12.jpg", 
+                category: "street", 
+                description: "Movement",
+                image: "images/car.bike.png" 
+            },
+            // Duplicate entries to ensure scrolling is required
+            { 
+                id: 13, 
+                name: "img13.jpg", 
+                category: "portraits", 
+                description: "I'm running out of desriptions",
+                image: "images/nightcar.png" 
+            },
+            { 
+                id: 14, 
+                name: "img14.jpg", 
+                category: "architecture", 
+                description: "View of the CN tower from Rogers Center",
+                image: "images/needle.png" 
+            },
+            { 
+                id: 15, 
+                name: "img15.jpg", 
+                category: "portraits", 
+                description: "The mascot was the only positive part of the white sox game",
+                image: "images/sox.png" 
+            },
+            { 
+                id: 16, 
+                name: "img16.jpg", 
+                category: "landscapes", 
+                description: "The grandest of canyons",
+                image: "images/grandcanyon.png" 
+            },
+            { 
+                id: 17, 
+                name: "img17.jpg", 
+                category: "portraits", 
+                description: "Couple goals",
+                image: "images/GCcouple.png" 
+            },
+            { 
+                id: 18, 
+                name: "img18.jpg", 
+                category: "landscapes", 
+                description: "Entrance to the Carlsbad Caverns",
+                image: "images/caves.png" 
+            },
+            { 
+                id: 19, 
+                name: "img19.jpg", 
+                category: "landscapes", 
+                description: "Some lighthouse in South Carolina",
+                image: "images/lighthouse.png" 
+            },
+            { 
+                id: 20, 
+                name: "img20.jpg", 
+                category: "landscapes", 
+                description: "Blue Ridge Mountains",
+                image: "images/blueridge.png" 
+            },
+            { 
+                id: 21, 
+                name: "img21.jpg", 
+                category: "architecture", 
+                description: "Our nations capital",
+                image: "images/washingtonmon.png" 
+            },
+            { 
+                id: 22, 
+                name: "img22.jpg", 
+                category: "architecture", 
+                description: "A view of the empire state building through a construction site",
+                image: "images/empire.png" 
+            },
+            { 
+                id: 23, 
+                name: "img23.jpg", 
+                category: "architecture", 
+                description: "Chi town",
+                image: "images/chicago.png" 
+            },
+            { 
+                id: 24, 
+                name: "img24.jpg", 
+                category: "street", 
+                description: "Summertime Chi",
+                image: "images/water.fountain.png" 
+            },
+            { 
+                id: 25, 
+                name: "img25.jpg", 
+                category: "architecture", 
+                description: "The gateway to the west",
+                image: "images/stl.arch.png" 
+            },
+            { 
+                id: 26, 
+                name: "img26.jpg", 
+                category: "portraits", 
+                description: "A cool looking bus driver in Wyoming",
+                image: "images/cowboy.png" 
+            },
+            { 
+                id: 27, 
+                name: "img27.jpg", 
+                category: "landscapes", 
+                description: "Kids playing with their dog on the beach",
+                image: "images/rock.png" 
+            },
+            { 
+                id: 28, 
+                name: "img28.jpg", 
+                category: "street", 
+                description: "Kid getting some much needed screentime at a crowded event",
+                image: "images/screentime.png" 
+            },
+            { 
+                id: 29, 
+                name: "img29.jpg", 
+                category: "street", 
+                description: "Fishing with a view",
+                image: "images/fishermansf.png" 
+            },
+            { 
+                id: 30, 
+                name: "img30.jpg", 
+                category: "landscapes", 
+                description: "Guy living in the moment",
+                image: "images/doublesunset.png" 
+            },
+            { 
+                id: 31, 
+                name: "img31.jpg", 
+                category: "street", 
+                description: "The bean",
+                image: "images/bean.png" 
+            },
+            { 
+                id: 32, 
+                name: "img32.jpg", 
+                category: "street", 
+                description: "Pigeons in flight",
+                image: "images/pigeons.png" 
+            },
+            { 
+                id: 33, 
+                name: "img33.jpg", 
+                category: "street", 
+                description: "My buddy",
+                image: "images/losan.png" 
+            },
+            { 
+                id: 34, 
+                name: "img34.jpg", 
+                category: "architecture", 
+                description: "Nice composition",
+                image: "images/lisbon.png" 
+            },
+            { 
+                id: 35, 
+                name: "img35.jpg", 
+                category: "architecture", 
+                description: "A memorial in Lisbon",
+                image: "images/monolith.png" 
+            },
+            { 
+                id: 36, 
+                name: "img36.jpg", 
+                category: "street", 
+                description: "A tunnel",
+                image: "images/tunnel.png" 
+            },
+            { 
+                id: 37, 
+                name: "img37.jpg", 
+                category: "street", 
+                description: "It's a gas station",
+                image: "images/dino.png" 
+            },
+            { 
+                id: 38, 
+                name: "img38.jpg", 
+                category: "portraits", 
+                description: "My other dog",
+                image: "images/blue.png" 
+            },
+            { 
+                id: 39, 
+                name: "img39.jpg", 
+                category: "portraits", 
+                description: "Friends enjoying a good laugh",
+                image: "images/bibb+simon.png" 
+            },
+            { 
+                id: 40, 
+                name: "img40.jpg", 
+                category: "street", 
+                description: "Slow Shutter Drive",
+                image: "images/lights.png" 
+            },
+            { 
+                id: 41, 
+                name: "img41.jpg", 
+                category: "street", 
+                description: "Neon car dealer",
+                image: "images/courtesy.png" 
+            },{ 
+                id: 42, 
+                name: "img42.jpg", 
+                category: "Street", 
+                description: "Cool Mural",
+                image: "images/big head.png" 
+            },{ 
+                id: 43, 
+                name: "img43.jpg", 
+                category: "street", 
+                description: "Just some cats",
+                image: "images/cats.png" 
+            },{ 
+                id: 44, 
+                name: "img45.jpg", 
+                category: "architecture", 
+                description: "Solid bridge",
+                image: "images/archbridge.png" 
+            },{ 
+                id: 46, 
+                name: "img46.jpg", 
+                category: "street", 
+                description: "Decisions decisions",
+                image: "images/library.png" 
+            },{ 
+                id: 47, 
+                name: "img47.jpg", 
+                category: "street", 
+                description: "Textured posters",
+                image: "images/posters.png" 
+            },
+        ];
+        
+        // Load photos into gallery with delay to simulate loading
+        const gallery = document.getElementById('photoGallery');
+        const photoCount = document.getElementById('photo-count');
+        const loadingSpinner = document.getElementById('loadingSpinner');
+        
+        // Simulate loading delay for effect
+        setTimeout(() => {
+            // Hide loading spinner
+            loadingSpinner.style.display = 'none';
+            
+            // Load photos
+            displayPhotos('all');
+            
+            // Update count
+            updatePhotoCount('all');
+        }, 800);
+        
+        function displayPhotos(category) {
+            // Clear gallery
+            gallery.innerHTML = '';
+            
+            // Filter photos if needed
+            const photos = category === 'all' 
+                ? photoData 
+                : photoData.filter(photo => photo.category === category);
+            
+            // Add photos with staggered animation
+            photos.forEach((photo, index) => {
+                const photoItem = document.createElement('div');
+                photoItem.className = 'photo-item';
+                photoItem.dataset.category = photo.category;
+                photoItem.style.animationDelay = `${index * 0.05}s`;
+                photoItem.onclick = function() { openPhotoDialog(photo); };
+                
+                const thumbnail = document.createElement('div');
+                thumbnail.className = 'photo-thumbnail';
+                
+                const img = document.createElement('img');
+                img.src = photo.image;
+                img.alt = photo.name;
+                img.loading = 'lazy'; // Lazy load images for better performance
+                
+                const label = document.createElement('div');
+                label.className = 'photo-label';
+                label.textContent = photo.name;
+                
+                thumbnail.appendChild(img);
+                photoItem.appendChild(thumbnail);
+                photoItem.appendChild(label);
+                gallery.appendChild(photoItem);
+                
+                // Add entrance animation
+                setTimeout(() => {
+                    photoItem.style.opacity = 1;
+                    photoItem.style.transform = 'translateY(0)';
+                }, index * 50);
+            });
+            
+            updatePhotoCount(category);
+        }
+        
+        function updatePhotoCount(category) {
+            const count = category === 'all' 
+                ? photoData.length 
+                : photoData.filter(photo => photo.category === category).length;
+            
+            photoCount.textContent = `${count} item${count !== 1 ? 's' : ''}`;
+        }
+        
+        // Photo dialog functionality
+        function openPhotoDialog(photo) {
+            const dialog = document.getElementById('photoDialog');
+            const title = document.getElementById('photoDialogTitle');
+            const content = document.getElementById('photoDialogContent');
+            
+            title.textContent = photo.name;
+            content.innerHTML = `
+                <img src="${photo.image}" alt="${photo.name}">
+                <div class="photo-info">
+                    <p>${photo.description}</p>
+                    <p><em>Category: ${photo.category.charAt(0).toUpperCase() + photo.category.slice(1)}</em></p>
+                </div>
+            `;
+            
+            dialog.classList.add('active');
+        }
+        
+        function closePhotoDialog() {
+            const dialog = document.getElementById('photoDialog');
+            
+            // Add closing animation
+            dialog.style.opacity = '0';
+            
+            setTimeout(() => {
+                dialog.classList.remove('active');
+                dialog.style.opacity = '';
+            }, 300);
+        }
+        
+        // Folder selection
+        document.querySelectorAll('.folder-item').forEach(item => {
+            item.addEventListener('click', function() {
+                // Update selected folder
+                document.querySelectorAll('.folder-item').forEach(i => {
+                    i.classList.remove('selected');
+                });
+                this.classList.add('selected');
+                
+                // Show loading spinner
+                gallery.innerHTML = '<div class="loading-spinner"></div>';
+                
+                // Get category and display photos
+                const category = this.dataset.category;
+                
+                // Simulate loading delay
+                setTimeout(() => {
+                    displayPhotos(category);
+                }, 400);
+            });
+        });
+        
+        // Menu functionality
+        document.querySelectorAll('.menu').forEach(button => {
+            button.addEventListener('click', function() {
+                alert(this.textContent + ' menu not implemented in this demo');
+            });
+        });
+        
+        // Close photo dialog when clicking outside
+        document.getElementById('photoDialog').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closePhotoDialog();
+            }
+        });
+    </script>
+</body>
+</html>

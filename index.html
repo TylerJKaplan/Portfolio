@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Windows 98 Snake</title>
+    <link rel="stylesheet" href="https://unpkg.com/98.css">
+    <style>
+        body {
+            background-color: #008080;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: 'MS Sans Serif', 'Segoe UI', Tahoma, sans-serif;
+            overflow: hidden;
+        }
+        
+        .window {
+            width: 700px;
+            background-color: #c0c0c0;
+            border: 2px solid;
+            border-color: #ffffff #808080 #808080 #ffffff;
+            position: relative;
+        }
+        
+        .game-container {
+            position: relative;
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        
+        #game-canvas {
+            display: block;
+            border: 2px inset #808080;
+            background-color: #000000;
+            margin: 0 auto;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+        
+        .score-container {
+            display: flex;
+            align-items: center;
+            font-weight: bold;
+        }
+        
+        .instructions {
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #808080;
+            background-color: #ffffcc;
+            font-size: 12px;
+        }
+        
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            margin: 10px 0;
+        }
+        
+        /* Boot screen styles */
+        .boot-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: #008080; /* Classic Windows 98 blue */
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #ffffff;
+            font-size: 24px;
+            z-index: 1000;
+        }
+        
+        .boot-logo {
+            margin-bottom: 30px;
+            font-size: 36px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+        
+        .boot-logo::before {
+            content: "";
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            margin-right: 15px;
+            background-color: #ffffff;
+            mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 88 88'%3E%3Cpath d='M0,12.402,35.687,5.984,35.768,42.5,0.088,42.563ZM39.996,5.3,87.314,0V41.573l-47.318.183ZM87.285,46.135l.027,41.674L39.996,82.373V46.135ZM35.688,82.855,0,76.476V46.262l35.688.12Z'/%3E%3C/svg%3E");
+            -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 88 88'%3E%3Cpath d='M0,12.402,35.687,5.984,35.768,42.5,0.088,42.563ZM39.996,5.3,87.314,0V41.573l-47.318.183ZM87.285,46.135l.027,41.674L39.996,82.373V46.135ZM35.688,82.855,0,76.476V46.262l35.688.12Z'/%3E%3C/svg%3E");
+            mask-repeat: no-repeat;
+            -webkit-mask-repeat: no-repeat;
+            mask-position: center;
+            -webkit-mask-position: center;
+            mask-size: contain;
+            -webkit-mask-size: contain;
+        }
+        
+        .boot-message {
+            font-size: 18px;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+        
+        .boot-progress-container {
+            width: 300px;
+            height: 20px;
+            background-color: #ffffff;
+            border: 2px inset #d5d5d5;
+            position: relative;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+        
+        .boot-progress-bar {
+            height: 100%;
+            width: 0%;
+            background: repeating-linear-gradient(
+                to right,
+                #008080,
+                #008080 10px,
+                #fffff0 10px,
+                #fffff0 20px
+            );
+            position: absolute;
+            left: 0;
+            top: 0;
+            animation: moveStripes 1s linear infinite;
+        }
+        
+        @keyframes moveStripes {
+            0% { background-position: 0 0; }
+            100% { background-position: 20px 0; }
+        }
+        
+        .boot-details {
+            font-size: 12px;
+            margin-top: 30px;
+            color: #cccccc;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .cursor-blink {
+            display: inline-block;
+            width: 8px;
+            height: 14px;
+            background-color: #ffffff;
+            margin-left: 5px;
+            animation: blink 1s step-end infinite;
+        }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+        
+        /* Game over message */
+        .game-over {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #c0c0c0;
+            border: 2px outset #ffffff;
+            padding: 20px;
+            text-align: center;
+            display: none;
+            z-index: 10;
+        }
+        
+        .game-over-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .game-over-buttons {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="window">
+        <div class="title-bar">
+            <div class="title-bar-text">Snake - Startup Portfolio</div>
+            <div class="title-bar-controls">
+                <button aria-label="Minimize"></button>
+                <button aria-label="Maximize"></button>
+                <button aria-label="Close"></button>
+            </div>
+        </div>
+        <div class="window-body">
+            <div class="instructions">
+                <p>Welcome to Snake! Reach 5 points to access the portfolio. Use arrow keys to control the snake.</p>
+                <p>Avoid hitting the walls or yourself. Each apple gives you 1 point.</p>
+            </div>
+            
+            <div class="game-container">
+                <canvas id="game-canvas" width="640" height="400"></canvas>
+                
+                <div class="controls">
+                    <div class="score-container">
+                        Score: <span id="score">0</span> / 5
+                    </div>
+                    <div>
+                        <button id="start-button">Start Game</button>
+                        <button id="skip-button">Skip Game</button>
+                    </div>
+                </div>
+                
+                <div class="game-over" id="game-over">
+                    <div class="game-over-title">Game Over!</div>
+                    <div>Your Score: <span id="final-score">0</span></div>
+                    <div class="game-over-buttons">
+                        <button id="restart-button">Play Again</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="status-bar">
+            <p class="status-bar-field">Press Start to begin</p>
+            <p class="status-bar-field"></p>
+            <p class="status-bar-field">Windows 98</p>
+        </div>
+    </div>
+    
+    <!-- Boot screen -->
+    <div class="boot-screen" id="bootScreen">
+        <div class="boot-logo">Welcome</div>
+        <div class="boot-message">Starting Portfolio...</div>
+        <div class="boot-progress-container">
+            <div class="boot-progress-bar" id="bootProgressBar"></div>
+        </div>
+        <div class="boot-details">
+            Loading system components...<span class="cursor-blink"></span>
+        </div>
+    </div>
+
+    <script>
+        // Game variables
+        const canvas = document.getElementById('game-canvas');
+        const ctx = canvas.getContext('2d');
+        const scoreElement = document.getElementById('score');
+        const finalScoreElement = document.getElementById('final-score');
+        const gameOverElement = document.getElementById('game-over');
+        const startButton = document.getElementById('start-button');
+        const skipButton = document.getElementById('skip-button');
+        const restartButton = document.getElementById('restart-button');
+        
+        // Game settings
+        const gridSize = 20;
+        const targetScore = 5;
+        let width = canvas.width;
+        let height = canvas.height;
+        let gameRunning = false;
+        let gameOver = false;
+        
+        // Snake variables
+        let snake = [];
+        let snakeDirection = 'right';
+        let nextDirection = 'right';
+        let score = 0;
+        let food = {};
+        let speed = 130; // milliseconds between moves
+        let gameLoop;
+        
+        // Game initialization
+        function initGame() {
+            // Reset game state
+            snake = [
+                {x: 7 * gridSize, y: 10 * gridSize},
+                {x: 6 * gridSize, y: 10 * gridSize},
+                {x: 5 * gridSize, y: 10 * gridSize}
+            ];
+            snakeDirection = 'right';
+            nextDirection = 'right';
+            score = 0;
+            gameOver = false;
+            scoreElement.textContent = score;
+            gameOverElement.style.display = 'none';
+            
+            // Create first food
+            createFood();
+            
+            // Draw initial state
+            draw();
+        }
+        
+        // Create food at random position
+        function createFood() {
+            const maxX = (width / gridSize) - 1;
+            const maxY = (height / gridSize) - 1;
+            
+            // Generate random position
+            food = {
+                x: Math.floor(Math.random() * maxX) * gridSize,
+                y: Math.floor(Math.random() * maxY) * gridSize
+            };
+            
+            // Check if food is on snake, if so, create a new one
+            for (let segment of snake) {
+                if (segment.x === food.x && segment.y === food.y) {
+                    return createFood();
+                }
+            }
+        }
+        
+        // Draw the game
+        function draw() {
+            // Clear canvas
+            ctx.fillStyle = '#000000';
+            ctx.fillRect(0, 0, width, height);
+            
+            // Draw snake
+            for (let i = 0; i < snake.length; i++) {
+                // Head is a different color
+                if (i === 0) {
+                    ctx.fillStyle = '#00FF00'; // Green head
+                } else {
+                    // Alternating colors for body
+                    ctx.fillStyle = i % 2 === 0 ? '#00CC00' : '#00DD00';
+                }
+                
+                ctx.fillRect(snake[i].x, snake[i].y, gridSize - 2, gridSize - 2);
+            }
+            
+            // Draw food (apple)
+            ctx.fillStyle = '#FF0000'; // Red apple
+            ctx.fillRect(food.x, food.y, gridSize - 2, gridSize - 2);
+            
+            // Draw apple stem
+            ctx.fillStyle = '#7F3300'; // Brown stem
+            ctx.fillRect(food.x + (gridSize/2) - 1, food.y - 4, 2, 4);
+        }
+        
+        // Update game state
+        function update() {
+            if (!gameRunning || gameOver) return;
+            
+            // Update direction
+            snakeDirection = nextDirection;
+            
+            // Calculate new head position
+            const head = {x: snake[0].x, y: snake[0].y};
+            
+            switch (snakeDirection) {
+                case 'up':
+                    head.y -= gridSize;
+                    break;
+                case 'down':
+                    head.y += gridSize;
+                    break;
+                case 'left':
+                    head.x -= gridSize;
+                    break;
+                case 'right':
+                    head.x += gridSize;
+                    break;
+            }
+            
+            // Check for collisions with walls
+            if (head.x < 0 || head.x >= width || head.y < 0 || head.y >= height) {
+                endGame();
+                return;
+            }
+            
+            // Check for collisions with self
+            for (let segment of snake) {
+                if (head.x === segment.x && head.y === segment.y) {
+                    endGame();
+                    return;
+                }
+            }
+            
+            // Check for food collision
+            if (head.x === food.x && head.y === food.y) {
+                // Increase score
+                score++;
+                scoreElement.textContent = score;
+                
+                // Create new food
+                createFood();
+                
+                // Increase speed slightly
+                if (speed > 70) {
+                    speed -= 5;
+                }
+                
+                // Check if target score is reached
+                if (score >= targetScore) {
+                    winGame();
+                    return;
+                }
+            } else {
+                // Remove tail segment
+                snake.pop();
+            }
+            
+            // Add new head segment
+            snake.unshift(head);
+            
+            // Draw updated state
+            draw();
+        }
+        
+        // End game (loss)
+        function endGame() {
+            gameRunning = false;
+            gameOver = true;
+            clearInterval(gameLoop);
+            
+            // Show game over popup
+            finalScoreElement.textContent = score;
+            gameOverElement.style.display = 'block';
+        }
+        
+        // Win game
+        function winGame() {
+            gameRunning = false;
+            clearInterval(gameLoop);
+            
+            // Start boot sequence
+            startBootSequence();
+        }
+        
+        // Start boot sequence
+        function startBootSequence() {
+            // Show boot screen
+            const bootScreen = document.getElementById('bootScreen');
+            bootScreen.style.display = 'flex';
+            
+            // Add random loading messages
+            const loadingMessages = [
+                "Loading user interface...",
+                "Initializing system components...",
+                "Processing portfolio data...",
+                "Configuring display settings...",
+                "Preparing creative content..."
+            ];
+            
+            const bootDetails = bootScreen.querySelector('.boot-details');
+            const messageInterval = setInterval(() => {
+                bootDetails.innerHTML = loadingMessages[Math.floor(Math.random() * loadingMessages.length)] + 
+                    '<span class="cursor-blink"></span>';
+            }, 1200);
+            
+            // Animate boot progress with pauses for authenticity
+            const bootProgressBar = document.getElementById('bootProgressBar');
+            let progress = 0;
+            let speed = 1.5; // Slightly faster than default
+            
+            const bootInterval = setInterval(() => {
+                // Random slowdowns to simulate Windows 98 loading
+                if (progress % 20 === 0) {
+                    speed = 0.5 + Math.random() * 2;
+                }
+                
+                progress += speed;
+                if (progress > 100) progress = 100;
+                
+                bootProgressBar.style.width = progress + '%';
+                
+                if (progress >= 100) {
+                    clearInterval(bootInterval);
+                    clearInterval(messageInterval);
+                    bootDetails.innerHTML = "Loading complete<span class=\"cursor-blink\"></span>";
+                    
+                    // Redirect to main site after boot animation
+                    setTimeout(() => {
+                        window.location.href = 'landing.html'; // Change to your main page
+                    }, 1500);
+                }
+            }, 40);
+        }
+        
+        // Handle keyboard inputs
+       function handleKeydown(e) {
+    // Start game with arrow keys or spacebar if not running
+    if (!gameRunning && (e.key === 'ArrowUp' || e.key === 'ArrowDown' || 
+                         e.key === 'ArrowLeft' || e.key === 'ArrowRight' || 
+                         e.key === ' ')) {
+        startGame();
+        // If it was spacebar, don't do anything else
+        if (e.key === ' ') return;
+    }
+    
+    if (!gameRunning) return;
+    
+    switch (e.key) {
+        case 'ArrowUp':
+            if (snakeDirection !== 'down') {
+                nextDirection = 'up';
+            }
+            break;
+        case 'ArrowDown':
+            if (snakeDirection !== 'up') {
+                nextDirection = 'down';
+            }
+            break;
+        case 'ArrowLeft':
+            if (snakeDirection !== 'right') {
+                nextDirection = 'left';
+            }
+            break;
+        case 'ArrowRight':
+            if (snakeDirection !== 'left') {
+                nextDirection = 'right';
+            }
+            break;
+    }
+}
+    
+        
+        // Start the game
+        function startGame() {
+            if (gameRunning) return;
+            
+            initGame();
+            gameRunning = true;
+            gameLoop = setInterval(update, speed);
+            
+            // Update status message
+            document.querySelector('.status-bar-field').textContent = 'Game running';
+            
+            // Focus on the canvas for keyboard controls
+            canvas.focus();
+        }
+        
+        // Skip game and go directly to portfolio
+        function skipGame() {
+            if (confirm('Are you sure you want to skip the game?')) {
+                startBootSequence();
+            }
+        }
+        
+        // Event listeners
+        startButton.addEventListener('click', startGame);
+        skipButton.addEventListener('click', skipGame);
+        restartButton.addEventListener('click', startGame);
+        document.addEventListener('keydown', handleKeydown);
+        
+        // Initialize game on page load
+        initGame();
+    </script>
+</body>
+</html>
