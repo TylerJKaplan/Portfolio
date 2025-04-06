@@ -36,7 +36,6 @@ function addThemeSelector() {
             <option value="">Windows 98</option>
             <option value="theme-xp">Windows XP</option>
             <option value="theme-win31">Hard Sell</option>
-            <option value="theme-dark">Dark Mode</option>
         </select>
     `;
     
