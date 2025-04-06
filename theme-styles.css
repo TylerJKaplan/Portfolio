@@ -72,29 +72,6 @@
     --theme-image: url('images/themes/hardsell.jpg');
 }
 
-/* Dark Theme */
-.theme-dark {
-    --background-color: #222222;
-    --window-bg: #333333;
-    --window-border: #444444 #111111 #111111 #444444;
-    --title-bar-bg: #111111;
-    --title-bar-text: #ffffff;
-    --content-bg: #383838;
-    --text-color: #e0e0e0;
-    --highlight-color: #0078d7;
-    --button-face: #444444;
-    --button-highlight: #555555;
-    --button-shadow: #222222;
-    --menu-bg: #333333;
-    --menu-text: #e0e0e0;
-    --menu-hover-bg: #0078d7;
-    --menu-hover-text: #ffffff;
-    --scrollbar-face: #444444;
-    --scrollbar-shadow: #222222;
-    --scrollbar-highlight: #555555;
-    --theme-image: none;
-}
-
 /* Apply theme to elements */
 body {
     background-color: var(--background-color);
