@@ -33,7 +33,7 @@
     --window-border: #0054e3 #0054e3 #0054e3 #0054e3;
     --title-bar-bg: linear-gradient(to right, #0a246a, #a6caf0);
     --title-bar-text: #ffffff;
-    --content-bg: #ece9d8;
+    --content-bg: #ffffff;
     --text-color: #000000;
     --highlight-color: #0a246a;
     --button-face: #ece9d8;
@@ -46,12 +46,12 @@
     --scrollbar-face: #ece9d8;
     --scrollbar-shadow: #aca899;
     --scrollbar-highlight: #ffffff;
-    --theme-image: url('images/windows_xp.jpg');
+    --theme-image: url('images/themes/windows_xp.jpg');
 }
 
-/* Windows 3.1 Theme */
-.theme-win31 {
-    --background-color: #008080;
+/* DVD Bouncing Logo Theme (replacing Windows 3.1 Theme) */
+.theme-dvd {
+    --background-color: #000000; /* Black background like DVD screens */
     --window-bg: #c0c0c0;
     --window-border: #ffffff #000000 #000000 #ffffff;
     --title-bar-bg: #000080;
@@ -69,8 +69,15 @@
     --scrollbar-face: #c0c0c0;
     --scrollbar-shadow: #000000;
     --scrollbar-highlight: #ffffff;
-    --theme-image: url('images/themes/hardsell.jpg');
+    --theme-image: none; /* No static image needed */
 }
+
+/* Override background for DVD theme */
+body.theme-dvd::after {
+    background-image: none !important;
+    background-color: transparent !important;
+}
+
 
 /* Apply theme to elements */
 body {
