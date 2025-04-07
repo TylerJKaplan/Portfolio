@@ -35,7 +35,7 @@ function addThemeSelector() {
         <select id="theme-select">
             <option value="">Windows 98</option>
             <option value="theme-xp">Windows XP</option>
-            <option value="theme-win31">Hard Sell</option>
+            <option value="theme-dvd">DVD Bounce</option>
         </select>
     `;
     
