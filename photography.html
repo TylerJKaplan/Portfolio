@@ -196,12 +196,13 @@
         }
         
         .photo-dialog-window {
-            width: 550px;
+            width: 650px;
             background-color: #c0c0c0;
             border: 2px outset #d5d5d5;
             transform: scale(0.9);
             opacity: 0;
             transition: transform 0.4s ease, opacity 0.4s ease;
+            position: relative;
         }
         
         .photo-dialog.active .photo-dialog-window {
@@ -240,27 +241,36 @@
             position: absolute;
             top: 50%;
             transform: translateY(-50%);
-            background-color: rgba(0,0,0,0.5);
+            background-color: rgba(0,0,0,0.7);
             color: white;
-            border: none;
-            padding: 20px 15px;
+            border: 2px outset #d5d5d5;
+            padding: 15px 12px;
             cursor: pointer;
-            font-size: 20px;
+            font-size: 24px;
             font-weight: bold;
-            transition: background-color 0.3s ease;
+            transition: all 0.3s ease;
             z-index: 10;
+            border-radius: 3px;
+            font-family: 'MS Sans Serif', sans-serif;
+            box-shadow: 2px 2px 4px rgba(0,0,0,0.3);
         }
         
         .nav-arrow:hover {
-            background-color: rgba(0,0,0,0.7);
+            background-color: rgba(0,0,0,0.9);
+            transform: translateY(-50%) scale(1.1);
+        }
+        
+        .nav-arrow:active {
+            border: 2px inset #d5d5d5;
+            transform: translateY(-50%) scale(0.95);
         }
         
         .nav-arrow.prev {
-            left: 10px;
+            left: -70px;
         }
         
         .nav-arrow.next {
-            right: 10px;
+            right: -70px;
         }
         
         /* Navigation hint */
@@ -908,6 +918,5 @@
             }
         });
     </script>
-    <script src="DVD-animation.js"></script>
 </body>
 </html>
