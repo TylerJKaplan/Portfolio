@@ -732,8 +732,8 @@
             
             // Filter photos if needed
             currentPhotos = category === 'all' 
-                ? photoData 
-                : photoData.filter(photo => photo.category === category);
+                ? [...photoData] 
+                : photoData.filter(photo => photo.category.toLowerCase() === category.toLowerCase());
             
             // Add photos with staggered animation
             currentPhotos.forEach((photo, index) => {
