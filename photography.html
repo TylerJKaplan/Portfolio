@@ -216,6 +216,7 @@
             justify-content: center;
             align-items: center;
             background-color: white;
+            position: relative;
         }
         
         .photo-dialog-content img {
@@ -232,6 +233,47 @@
             line-height: 1.4;
             text-align: center;
             color: #333;
+        }
+        
+        /* Navigation arrows */
+        .nav-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(0,0,0,0.5);
+            color: white;
+            border: none;
+            padding: 20px 15px;
+            cursor: pointer;
+            font-size: 20px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+            z-index: 10;
+        }
+        
+        .nav-arrow:hover {
+            background-color: rgba(0,0,0,0.7);
+        }
+        
+        .nav-arrow.prev {
+            left: 10px;
+        }
+        
+        .nav-arrow.next {
+            right: 10px;
+        }
+        
+        /* Navigation hint */
+        .nav-hint {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 11px;
+            color: #666;
+            background-color: rgba(255,255,255,0.9);
+            padding: 5px 10px;
+            border-radius: 3px;
         }
         
         /* Standard Loading Spinner */
@@ -333,6 +375,9 @@
             </div>
             <div class="photo-dialog-content" id="photoDialogContent">
                 <!-- Photo will be displayed here -->
+                <button class="nav-arrow prev" onclick="navigatePhoto(-1)">‹</button>
+                <button class="nav-arrow next" onclick="navigatePhoto(1)">›</button>
+                <div class="nav-hint">Use ← → arrow keys or click arrows to navigate</div>
             </div>
         </div>
     </div>
@@ -660,6 +705,10 @@
             },
         ];
         
+        // Navigation state
+        let currentPhotoIndex = 0;
+        let currentPhotos = [];
+        
         // Load photos into gallery with delay to simulate loading
         const gallery = document.getElementById('photoGallery');
         const photoCount = document.getElementById('photo-count');
@@ -682,17 +731,17 @@
             gallery.innerHTML = '';
             
             // Filter photos if needed
-            const photos = category === 'all' 
+            currentPhotos = category === 'all' 
                 ? photoData 
                 : photoData.filter(photo => photo.category === category);
             
             // Add photos with staggered animation
-            photos.forEach((photo, index) => {
+            currentPhotos.forEach((photo, index) => {
                 const photoItem = document.createElement('div');
                 photoItem.className = 'photo-item';
                 photoItem.dataset.category = photo.category;
                 photoItem.style.animationDelay = `${index * 0.05}s`;
-                photoItem.onclick = function() { openPhotoDialog(photo); };
+                photoItem.onclick = function() { openPhotoDialog(index); };
                 
                 const thumbnail = document.createElement('div');
                 thumbnail.className = 'photo-thumbnail';
@@ -730,21 +779,62 @@
         }
         
         // Photo dialog functionality
-        function openPhotoDialog(photo) {
+        function openPhotoDialog(photoIndex) {
+            currentPhotoIndex = photoIndex;
+            showCurrentPhoto();
+            
             const dialog = document.getElementById('photoDialog');
+            dialog.classList.add('active');
+        }
+        
+        function showCurrentPhoto() {
+            const photo = currentPhotos[currentPhotoIndex];
             const title = document.getElementById('photoDialogTitle');
             const content = document.getElementById('photoDialogContent');
             
-            title.textContent = photo.name;
-            content.innerHTML = `
-                <img src="${photo.image}" alt="${photo.name}">
-                <div class="photo-info">
+            title.textContent = `${photo.name} (${currentPhotoIndex + 1} of ${currentPhotos.length})`;
+            
+            // Update the photo content while keeping navigation elements
+            const existingImage = content.querySelector('img');
+            const existingInfo = content.querySelector('.photo-info');
+            
+            if (existingImage) {
+                existingImage.src = photo.image;
+                existingImage.alt = photo.name;
+            } else {
+                const img = document.createElement('img');
+                img.src = photo.image;
+                img.alt = photo.name;
+                content.insertBefore(img, content.querySelector('.nav-arrow'));
+            }
+            
+            if (existingInfo) {
+                existingInfo.innerHTML = `
                     <p>${photo.description}</p>
                     <p><em>Category: ${photo.category.charAt(0).toUpperCase() + photo.category.slice(1)}</em></p>
-                </div>
-            `;
+                `;
+            } else {
+                const photoInfo = document.createElement('div');
+                photoInfo.className = 'photo-info';
+                photoInfo.innerHTML = `
+                    <p>${photo.description}</p>
+                    <p><em>Category: ${photo.category.charAt(0).toUpperCase() + photo.category.slice(1)}</em></p>
+                `;
+                content.appendChild(photoInfo);
+            }
+        }
+        
+        function navigatePhoto(direction) {
+            currentPhotoIndex += direction;
             
-            dialog.classList.add('active');
+            // Loop around if at the beginning/end
+            if (currentPhotoIndex < 0) {
+                currentPhotoIndex = currentPhotos.length - 1;
+            } else if (currentPhotoIndex >= currentPhotos.length) {
+                currentPhotoIndex = 0;
+            }
+            
+            showCurrentPhoto();
         }
         
         function closePhotoDialog() {
@@ -758,6 +848,29 @@
                 dialog.style.opacity = '';
             }, 300);
         }
+        
+        // Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            const dialog = document.getElementById('photoDialog');
+            
+            // Only handle arrow keys when photo dialog is open
+            if (dialog.classList.contains('active')) {
+                switch(e.key) {
+                    case 'ArrowLeft':
+                        e.preventDefault();
+                        navigatePhoto(-1);
+                        break;
+                    case 'ArrowRight':
+                        e.preventDefault();
+                        navigatePhoto(1);
+                        break;
+                    case 'Escape':
+                        e.preventDefault();
+                        closePhotoDialog();
+                        break;
+                }
+            }
+        });
         
         // Folder selection
         document.querySelectorAll('.folder-item').forEach(item => {
