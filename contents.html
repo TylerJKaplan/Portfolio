@@ -99,6 +99,10 @@
             background-image: url('https://win98icons.alexmeub.com/icons/png/paint_old-0.png');
         }
         
+        .folder-icon.spec-ad {
+            background-image: url('https://win98icons.alexmeub.com/icons/png/internet_connection_wiz-3.png');
+        }
+        
         .menu-bar {
             display: flex;
             margin-bottom: 10px;
@@ -147,11 +151,16 @@
                         <div class="folder-icon design"></div>
                         <div class="folder-label">Graphic Design</div>
                     </div>
+                    
+                    <div id="spec-ad-folder" class="folder" onclick="folderClick(this, 'spec-ad.html')">
+                        <div class="folder-icon spec-ad"></div>
+                        <div class="folder-label">Spec Ads</div>
+                    </div>
                 </div>
             </div>
         </div>
         <div class="status-bar">
-            <p class="status-bar-field">3 items</p>
+            <p class="status-bar-field">4 items</p>
             <p class="status-bar-field"></p>
             <p class="status-bar-field">Windows 98</p>
         </div>
