@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="theme-styles.css">
+<script src="theme-switcher.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spec Ad Campaigns</title>
+    <link rel="stylesheet" href="https://unpkg.com/98.css">
+    <style>
+        /* Base Windows 98 Styling */
+        body {
+            background-color: #008080; /* Classic teal Windows background */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: 'MS Sans Serif', 'Segoe UI', Tahoma, sans-serif;
+        }
+        
+        .window {
+            width: 700px;
+            height: 520px;
+            position: relative;
+        }
+        
+        .window-body {
+            height: calc(100% - 58px);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        /* Clean campaign container */
+        .campaign-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            border: 1px inset #d5d5d5;
+            background-color: #ffffff;
+            overflow: hidden;
+            position: relative;
+            margin: 5px;
+        }
+        
+        /* Campaign gallery area */
+        .campaign-gallery {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+        
+        .campaign-item {
+            border: 1px solid #d5d5d5;
+            padding: 10px;
+            background-color: #f5f5f5;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            margin-bottom: 5px;
+            flex-shrink: 0;
+        }
+        
+        .campaign-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            border-color: #0000aa;
+        }
+        
+        .campaign-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+        
+        .campaign-description {
+            font-size: 12px;
+            margin-bottom: 10px;
+        }
+        
+        .campaign-image {
+            width: 100%;
+            height: 200px;
+            background-color: #e0e0e0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 5px;
+            border: 1px solid #d5d5d5;
+        }
+        
+        .campaign-image img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+        
+        .campaign-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-top: 5px;
+        }
+        
+        .campaign-tag {
+            font-size: 10px;
+            background-color: #e0e0e0;
+            padding: 2px 6px;
+            border: 1px solid #d5d5d5;
+        }
+        
+        /* Campaign detail dialog */
+        .campaign-dialog {
+            display: none;
+            position: fixed;
+            z-index: 100;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .campaign-dialog.active {
+            display: flex;
+        }
+        
+        .campaign-window {
+            width: 750px;
+            height: 550px;
+            background-color: #c0c0c0;
+            border: 2px outset #d5d5d5;
+        }
+        
+        .campaign-content {
+            height: calc(100% - 86px);
+            overflow: hidden;
+            background-color: #ffffff;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Tab system */
+        .tab-container {
+            display: flex;
+            border-bottom: 1px solid #808080;
+            background-color: #c0c0c0;
+        }
+        
+        .tab-button {
+            padding: 8px 16px;
+            border: 1px solid #808080;
+            border-bottom: none;
+            background-color: #c0c0c0;
+            cursor: pointer;
+            font-size: 11px;
+            margin-right: 2px;
+            border-top-left-radius: 3px;
+            border-top-right-radius: 3px;
+        }
+        
+        .tab-button.active {
+            background-color: #ffffff;
+            border-bottom: 1px solid #ffffff;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .tab-button:hover:not(.active) {
+            background-color: #e0e0e0;
+        }
+        
+        .tab-content {
+            display: none;
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .tab-content h3 {
+            color: #000080;
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+        
+        .tab-content h4 {
+            color: #800000;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+        
+        .tab-content p {
+            margin-bottom: 10px;
+            line-height: 1.4;
+            font-size: 12px;
+        }
+        
+        .tab-content ul {
+            margin-bottom: 15px;
+            padding-left: 20px;
+        }
+        
+        .tab-content li {
+            margin-bottom: 5px;
+            font-size: 12px;
+        }
+        
+        .creative-gallery {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .creative-image {
+            width: calc(50% - 5px);
+            height: auto;
+            border: 1px solid #d5d5d5;
+            object-fit: contain;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+        
+        .creative-image:hover {
+            transform: scale(1.02);
+            border-color: #0000aa;
+        }
+        
+        .execution-metrics {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .metric-item {
+            background-color: #f0f0f0;
+            padding: 10px;
+            border: 1px solid #d5d5d5;
+        }
+        
+        .metric-label {
+            font-weight: bold;
+            font-size: 11px;
+            color: #000080;
+        }
+        
+        .metric-value {
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        
+        /* Warning dialog */
+        .warning-dialog {
+            display: none;
+            position: fixed;
+            z-index: 300;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .warning-dialog.active {
+            display: flex;
+        }
+        
+        .warning-window {
+            width: 400px;
+            background-color: #c0c0c0;
+            border: 2px outset #d5d5d5;
+            font-family: 'MS Sans Serif', 'Segoe UI', Tahoma, sans-serif;
+        }
+        
+        .warning-content {
+            padding: 16px;
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+        
+        .warning-icon {
+            width: 32px;
+            height: 32px;
+            background-image: url('https://win98icons.alexmeub.com/icons/png/msg_warning-0.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            flex-shrink: 0;
+            margin-top: 4px;
+        }
+        
+        .warning-text {
+            flex: 1;
+        }
+        
+        .warning-text h3 {
+            margin: 0 0 8px 0;
+            font-size: 12px;
+            font-weight: bold;
+            color: #000000;
+        }
+        
+        .warning-text p {
+            margin: 0;
+            font-size: 11px;
+            line-height: 1.3;
+            color: #000000;
+        }
+        
+        .warning-buttons {
+            display: flex;
+            justify-content: center;
+            padding: 12px 16px 16px 16px;
+        }
+        
+        .warning-buttons button {
+            width: 75px;
+            height: 23px;
+            font-size: 11px;
+        }
+
+        /* Image viewer dialog - reused from graphic design */
+        .image-viewer {
+            display: none;
+            position: fixed;
+            z-index: 200;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .image-viewer.active {
+            display: flex;
+        }
+        
+        .image-viewer-window {
+            width: 80%;
+            max-width: 800px;
+            height: 80%;
+            max-height: 600px;
+            background-color: #c0c0c0;
+            border: 2px outset #d5d5d5;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .image-viewer-content {
+            flex: 1;
+            background-color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: auto;
+            padding: 10px;
+        }
+        
+        .image-viewer-content img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+    </style>
+</head>
+<body>
+    <div class="window">
+        <div class="title-bar">
+            <div class="title-bar-text">Spec Ad Campaigns</div>
+            <div class="title-bar-controls">
+                <button aria-label="Minimize"></button>
+                <button aria-label="Maximize"></button>
+                <button aria-label="Close" onclick="window.location.href='contents.html'"></button>
+            </div>
+        </div>
+        <div class="window-body">
+            <div class="toolbar" style="margin-bottom: 5px">
+                <button onclick="window.location.href='contents.html'">Back</button>
+            </div>
+            
+            <div class="campaign-container">
+                <div class="campaign-gallery" id="campaignGallery">
+                    <!-- Campaign projects will be added here by JavaScript -->
+                </div>
+            </div>
+        </div>
+        <div class="status-bar">
+            <p class="status-bar-field"><span id="campaign-count">2 campaigns</span></p>
+            <p class="status-bar-field"></p>
+            <p class="status-bar-field">Windows 98</p>
+        </div>
+    </div>
+    
+    <!-- Warning Dialog -->
+    <div class="warning-dialog" id="warningDialog">
+        <div class="warning-window">
+            <div class="title-bar">
+                <div class="title-bar-text">Warning</div>
+            </div>
+            <div class="warning-content">
+                <div class="warning-icon"></div>
+                <div class="warning-text">
+                    <h3>Warning</h3>
+                    <p>These campaigns contain AI slop. I would love to hire an actual illustrator for story boards and design but these ads are just ideas that I wanted to put out there. Perfection is the enemy of creation or whatever. Each concept is from my brain but yes some content is AI generated to save time, money and sanity.</p>
+                </div>
+            </div>
+            <div class="warning-buttons">
+                <button onclick="closeWarningDialog()">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Campaign Detail Dialog -->
+    <div class="campaign-dialog" id="campaignDialog">
+        <div class="campaign-window">
+            <div class="title-bar">
+                <div class="title-bar-text" id="campaignDialogTitle">Campaign Details</div>
+                <div class="title-bar-controls">
+                    <button aria-label="Close" onclick="closeCampaignDialog()"></button>
+                </div>
+            </div>
+            <div class="window-body" style="height: calc(100% - 28px); overflow: hidden;">
+                <div class="toolbar">
+                    <button onclick="closeCampaignDialog()">Back</button>
+                </div>
+                <div class="campaign-content" id="campaignContent">
+                    <div class="tab-container">
+                        <div class="tab-button active" onclick="switchTab('brief')">Brief</div>
+                        <div class="tab-button" onclick="switchTab('strategy')">Strategy</div>
+                        <div class="tab-button" onclick="switchTab('creative')">Creative</div>
+                        <div class="tab-button" onclick="switchTab('execution')">Execution</div>
+                    </div>
+                    
+                    <div id="brief-tab" class="tab-content active">
+                        <!-- Brief content will be loaded here -->
+                    </div>
+                    
+                    <div id="strategy-tab" class="tab-content">
+                        <!-- Strategy content will be loaded here -->
+                    </div>
+                    
+                    <div id="creative-tab" class="tab-content">
+                        <!-- Creative content will be loaded here -->
+                    </div>
+                    
+                    <div id="execution-tab" class="tab-content">
+                        <!-- Execution content will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Image Viewer Dialog -->
+    <div class="image-viewer" id="imageViewer">
+        <div class="image-viewer-window">
+            <div class="title-bar">
+                <div class="title-bar-text">Image Viewer</div>
+                <div class="title-bar-controls">
+                    <button aria-label="Close" onclick="closeImageViewer()"></button>
+                </div>
+            </div>
+            <div class="toolbar">
+                <button onclick="closeImageViewer()">Close</button>
+            </div>
+            <div class="image-viewer-content" id="imageViewerContent">
+                <!-- The enlarged image will be displayed here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Campaign data with tabbed content structure
+        const campaigns = [
+            {
+                id: 1,
+                title: "Boomers Campaign",
+                description: "A targeted advertising campaign reaching the 'zoomer' demographic with strategic messaging and creative execution.",
+                thumbnail: "images/boomers logo.png", // Replace with your actual thumbnail
+                tags: ["Target Demo", "Traditional Media", "Brand Awareness"],
+                
+                // Tab content
+                brief: {
+                    title: "Campaign Brief",
+                    content: `
+                        <h4>Client Overview</h4>
+                        <p>Boomers is a family-focused amusement park brand with locations across California and Florida. Known for its miniature golf, arcade games, go-karts, batting cages, bumper boats, and casual food & beverage offerings, Boomers has historically positioned itself as a destination for kids, families, and birthday parties. 
+
+                        However, as competition from larger theme parks (Disneyland, Knott’s Berry Farm, Six Flags) and experiential entertainment (Topgolf, barcades, escape rooms) grows, Boomers faces a key challenge: remaining culturally relevant to young adults (Gen Z).
+
+                        This campaign [ Boomers → Zoomers ] repositions Boomers as an ironically self-aware brand that acknowledges Gen Z skepticism toward advertising, while still delivering affordable, group-based fun.</p>
+                        
+                        <h4>Campaign Objectives</h4>
+                        <ul>
+                            <li>Increase weekday attendance among young adults (ages 21–28) by introducing “Zoomer Tuesdays.”</li>
+                            <li>Build brand awareness within Gen Z by leveraging self-aware, viral-feel creative that generates online buzz.</li>
+                            <li>Create positive associations with Boomers as an affordable, fun alternative to expensive theme parks or nightlife.</li>
+                        </ul>
+                        
+                        <h4>Target Audience</h4>
+                        <ul>
+                            <li>Age: 21–28 (young adults, college students, early career).</li>
+                            <li>Income: Lower–middle income; price-sensitive, but willing to spend on social outings.</li>
+                            <li>Nostalgic for “childhood” activities like mini golf and bumper boats when repackaged for adults.</li>
+                             <li>Often choose and alternative entertainment for group nights out instead of bars.</li>
+                        </ul>
+                        
+                        <h4>Key Message</h4>
+                        <p>Escape the crushing weight of the world… at Boomers</p>
+                    `
+                },
+                
+                strategy: {
+                    title: "Strategic Approach",
+                    content: `
+                        <h4>Market Analysis</h4>
+                        <p>Major Theme Parks (Disney, Knott’s, Six Flags): Offer large-scale thrill rides, but are expensive and exhausting.
+
+                        Experiential Alternatives (Topgolf, Dave & Buster’s, Escape Rooms, Barcades): Trendy, but often costlier and less group-inclusive.</p>
+                        
+                        <h4>Media Strategy</h4>
+                        <ul>
+                            <li>TikTok, Instagram Reels, YouTube Shorts → for viralality and reach.</li>
+                            <li>OOH near nightlife + campuses.</li>
+                            <li>Heavy Tuesday pushes; align with payday weeks for young adults.</li>
+                        </ul>
+                        
+                        <h4>Creative Strategy</h4>
+                       <ul>
+                            <li>Voice: ironic, sarcastic, anti-brand.</li>
+                            <li>Visuals: chaotic lo-fi mixed with "professional ad parody” polish.</li>
+                        </ul> 
+                        
+                        <h4>Success Metrics</h4>
+                         <ul>
+                            <li>Attendance lift on Tuesdays (primary KPI).</li>
+                            <li>Social engagement (shares, stitches, duets on TikTok).</li>
+                         <li>Brand awareness measured by surveys + mentions.</li>
+                        <li>Food & game sales during promotion nights.</li>
+
+                        </ul>
+                        `
+                },
+                
+                creative: {
+                    title: "Creative Execution",
+                    content: `
+                        <h4>Creative Concept</h4>
+                        <p>Boomers leans into irony by openly admitting it’s pandering to Gen Z and highlights Boomers as an alternative to expensive or cliché outings.</p>
+                        
+                        <h4>Copy & Messaging</h4>
+                       <table style="width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 12px; table-layout: fixed; font-family: 'MS Sans Serif', 'Segoe UI', Tahoma, sans-serif;">
+                            <thead>
+                                <tr style="background-color: #e0e0e0;">
+                                    <th style="border: 1px solid #808080; padding: 10px; text-align: left; font-weight: bold; width: 50%; word-wrap: break-word;">AUDIO (VO / Dialogue / Music / SFX)</th>
+                                    <th style="border: 1px solid #808080; padding: 10px; text-align: left; font-weight: bold; width: 50%; word-wrap: break-word;">VISUALS (Action / Camera / Notes)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td style="border: 1px solid #808080; padding: 10px; vertical-align: top; word-wrap: break-word; white-space: normal;"><strong>VO (Announcer, omnipresent, sarcastic):</strong> “Howdy zoomers! it's your favorite local amusement park: Boomers. And we want you to know individuals aged 21-28 should not be treated like a commodity and farmed for profit.”</td>
+                                    <td style="border: 1px solid #808080; padding: 10px; vertical-align: top; word-wrap: break-word; white-space: normal;">Wide shot of <strong>Boomers castle facade</strong> — just the top of the castle. The "B" in Boomers Logo crossed out and replaced with a "Z".
+
+</td>
+                                </tr>
+                                <tr style="background-color: #f8f8f8;">
+                                    <td style="border: 1px solid #808080; padding: 10px; vertical-align: top; word-wrap: break-word; white-space: normal;">—</td>
+                                    <td style="border: 1px solid #808080; padding: 10px; vertical-align: top; word-wrap: break-word; white-space: normal;"><strong>Camera pans down</strong> to reveal spokesperson (early 20s, male or female, casual).</td>
+                                </tr>
+                                <tr>
+                                    <td style="border: 1px solid #808080; padding: 10px; vertical-align: top; word-wrap: break-word; white-space: normal;"><strong>Spokesperson (to camera):</strong> "We here at Boomers heard you 21–28 year olds like to spend money on experiences, maybe because the prospect of buying a house seems increasingly impossible…"</td>
+                                    <td style="border: 1px solid #808080; padding: 10px; vertical-align: top; word-wrap: break-word; white-space: normal;">Spokesperson approaches <strong>mini golf hole with a small house</strong>.</td>
+                                </tr>
+                                <tr style="background-color: #f8f8f8;">
+                                    <td style="border: 1px solid #808080; padding: 10px; vertical-align: top; word-wrap: break-word; white-space: normal;"><strong>Spokesperson (smiles):</strong> "Or maybe because you're just that fun."</td>
+                                    <td style="border: 1px solid #808080; padding: 10px; vertical-align: top; word-wrap: break-word; white-space: normal;">Spokesperson putts → ball sinks, but clearly from an <strong>off-frame insert take</strong> (obviously faked).</td>
+                                </tr>
+                                <tr>
+                                    <td style="border: 1px solid #808080; padding: 10px; vertical-align: top; word-wrap: break-word; white-space: normal;"><strong>Spokesperson (sitting at bar, low-key delivery):</strong> “We heard you don’t drink as much… Well hey, we’ve got a full bar. You can order a soda, or try something stronger. Alcohol is ‘lit’ and definitely not linked to long term health implications…” </td>
+                                    <td style="border: 1px solid #808080; padding: 10px; vertical-align: top; word-wrap: break-word; white-space: normal;"><strong>Bar scene</strong>: Dim, moody lighting. Classy jazz music plays in background. Spokesperson seated at bar with drink props.</td>
+                                </tr>
+                                <tr style="background-color: #f8f8f8;">
+                                    <td style="border: 1px solid #808080; padding: 10px; vertical-align: top; word-wrap: break-word; white-space: normal;"><strong>Spokesperson (grinning):</strong> "…but you know what it *is* linked to? Short term <i>fuun implications.</i>"</td>
+                                    <td style="border: 1px solid #808080; padding: 10px; vertical-align: top; word-wrap: break-word; white-space: normal;"><strong>Smash cut</strong> to spokesperson now at the <strong>pool area</strong>. Spokesperson extends arm to camera. Camera pans to <strong>crowd of young people cheering, jumping into bumper boats pool</strong>.</td>
+                                </tr>
+                                <tr>
+                                    <td style="border: 1px solid #808080; padding: 10px; vertical-align: top; word-wrap: break-word; white-space: normal;"><strong>Spokesperson (drying off with towel):</strong> "We heard you're not having sex either."</td>
+                                    <td style="border: 1px solid #808080; padding: 10px; vertical-align: top; word-wrap: break-word; white-space: normal;">Spokesperson toweling off, still damp. Tosses towel offscreen.</td>
+                                </tr>
+                                <tr style="background-color: #f8f8f8;">
+                                    <td style="border: 1px solid #808080; padding: 10px; vertical-align: top; word-wrap: break-word; white-space: normal;"><strong>Spokesperson (with group, smiling):</strong> "That's fine. Come to Boomers and get hella platonic."</td>
+                                    <td style="border: 1px solid #808080; padding: 10px; vertical-align: top; word-wrap: break-word; white-space: normal;">High-fives a group of friends. Crowd cheers.</td>
+                                </tr>
+                                <tr>
+                                    <td style="border: 1px solid #808080; padding: 10px; vertical-align: top; word-wrap: break-word; white-space: normal;"><strong>Spokesperson (to camera):</strong> "Anyway you slice it."</td>
+                                    <td style="border: 1px solid #808080; padding: 10px; vertical-align: top; word-wrap: break-word; white-space: normal;">Spokesperson framed center, Holding a Pizza, surrounded by group. Aerial/Ladder shot</td>
+                                </tr>
+                                <tr style="background-color: #f8f8f8;">
+                                    <td style="border: 1px solid #808080; padding: 10px; vertical-align: top; word-wrap: break-word; white-space: normal;"><strong>Spokesperson and group to Camera (Cheesy synchronized):</strong> "Tuesdays at Boomers are for Zoomers."</td>
+                                    <td style="border: 1px solid #808080; padding: 10px; vertical-align: top; word-wrap: break-word; white-space: normal;"><strong>Graphic overlay</strong>: Bold graffiti-style text. "Special Happy Hour Menu + Reduced Prices on Games for Ages 17–28."</td>
+                                </tr>
+                                <tr>
+                                    <td style="border: 1px solid #808080; padding: 10px; vertical-align: top; word-wrap: break-word; white-space: normal;"><strong>VO (Announcer, dry):</strong> "Escape the crushing weight of the world… at Boomers."</td>
+                                    <td style="border: 1px solid #808080; padding: 10px; vertical-align: top; word-wrap: break-word; white-space: normal;">Graphic fades. Logo sequence begins.</td>
+                                </tr>
+                                <tr style="background-color: #f8f8f8;">
+                                    <td style="border: 1px solid #808080; padding: 10px; vertical-align: top; word-wrap: break-word; white-space: normal;"><strong>Young Professional #1 (in boardroom):</strong> "No it's totally different than the IHOP IHOB thing."</td>
+                                    <td style="border: 1px solid #808080; padding: 10px; vertical-align: top; word-wrap: break-word; white-space: normal;">Hard cut to <strong>boardroom full of young professionals</strong> in pitch meeting.</td>
+                                </tr>
+                                <tr>
+                                    <td style="border: 1px solid #808080; padding: 10px; vertical-align: top; word-wrap: break-word; white-space: normal;"><strong>Young Professional #2:</strong> "How? It's the exact same thing."</td>
+                                    <td style="border: 1px solid #808080; padding: 10px; vertical-align: top; word-wrap: break-word; white-space: normal;">Room silent. Awkward beat. Cut to <strong>Boomers logo vandalized with ZOOMERS spray paint.</strong> End.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        <h4>Visual Elements</h4>
+                        <p>AI slop visuals.</p>
+                        
+                        <div class="creative-gallery">
+                            <img src="images/Zoomers1.png" alt="Creative Asset 1" class="creative-image" onclick="openImageViewer('images/Zoomers1.png')">
+                            <img src="images/Zoomers2.png" alt="Storyboard" class="creative-image" onclick="openImageViewer('images/Zoomers2.png')">
+                        <img src="images/Zoomers3.png" alt="Creative Asset 1" class="creative-image" onclick="openImageViewer('images/Zoomers3.png')">
+                        <img src="images/Zoomer4.png" alt="Creative Asset 1" class="creative-image" onclick="openImageViewer('images/Zoomer4.png')">
+                        </div>
+                    `
+                },
+                
+                execution: {
+                    title: "Campaign Execution & Results",
+                    content: `
+                        <h4>Implementation Plan</h4>
+                        <p> <div><strong>Phase 1: Guerrilla / Organic Bait </strong></div>
+
+
+                        Fake “Boomers → Zoomers” vandalized signage seeded on TikTok and Twitter.
+
+
+                       <div><strong> Phase 2: Paid Push</strong></div>
+
+                        Launch 30-sec spec spot across TikTok, Instagram, YouTube.
+
+                       <div> OOH placements on bus shelters, billboards near universities + nightlife districts. </div>
+
+                     <div><strong> Phase 3: In-Park Activation</strong></div>
+
+                        “Zoomer Tuesdays” with happy hour menu + reduced games.
+
+                        Park décor featuring graffiti-style murals and photo opps.</p>
+                        
+                        <h4>Budget Allocation</h4>
+                        <p>IDK this is all fake and I don't want to make a budget or projected results. Thank you! </p>
+                        
+                        <h4>Projected Results</h4>
+                        <div class="execution-metrics">
+                            <div class="metric-item">
+                                <div class="metric-label">Projected Reach</div>
+                                <div class="metric-value">XX% of target demo</div>
+                            </div>
+                            <div class="metric-item">
+                                <div class="metric-label">Expected Engagement</div>
+                                <div class="metric-value">XX% engagement rate</div>
+                            </div>
+                            <div class="metric-item">
+                                <div class="metric-label">Brand Lift</div>
+                                <div class="metric-value">+XX% awareness</div>
+                            </div>
+                            <div class="metric-item">
+                                <div class="metric-label">ROI Projection</div>
+                                <div class="metric-value">X:1 return</div>
+                            </div>
+                        </div>
+                        
+                        <h4>Next Steps</h4>
+                        <p>Open my next spec ad or go outside</p>
+                    `
+                }
+            },
+            
+            {
+                id: 2,
+                title: "Wahoos Fish Tacos Campaign",
+                description: "A fresh approach to promoting Wahoos Fish Tacos with focus on their California Roots",
+                thumbnail: "images/Wahoos-Logo-LStroke.png", // Replace with your actual thumbnail
+                tags: ["Food & Beverage", "Lifestyle", "Local Marketing"],
+                
+                // Tab content
+                brief: {
+                    title: "Campaign Brief",
+                    content: `
+                        <p> No Fluff. It’s a simple idea for Wahoo’s. The idea came to me when I was eating there on my lunch break and thought, “Why don’t they have a California Burrito? They serve fries, they’re proud of their SoCal roots… seems like a no-brainer.” That’s where this concept came from. One guy pushing so hard for a menu change that the company just gives in. After the campaign launches to boost engagement and reach, you could spin off a fictional character account, @Cal_E_Burrito, as another creative channel to keep the buzz going. He could run amuck online posting memes, polls, even petitioning to make the California Burrito the official state burrito of California. </p>
+                    `
+                },
+                
+                strategy: {
+                    title: "Strategic Approach",
+                    content: `
+                        <h4>---------></h4>
+                    `
+                },
+                
+                creative: {
+                    title: "Creative Execution",
+                    content: `
+                        
+                        <h4>Copy & Messaging</h4>
+                  <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wahoo's Storyboard</title>
+    <style>
+        body {
+            font-family: 'MS Sans Serif', 'Segoe UI', Tahoma, sans-serif;
+            background-color: #f0f0f0;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h3>Wahoo's California Burrito Campaign - Storyboard</h3>
+    <p><strong>Length:</strong> ~30 seconds</p>
+    
+    <table style="width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 12px; table-layout: fixed; font-family: 'MS Sans Serif', 'Segoe UI', Tahoma, sans-serif;">
+        <thead>
+            <tr style="background-color: #e0e0e0;">
+                <th style="border: 1px solid #808080; padding: 10px; text-align: left; font-weight: bold; width: 50%; word-wrap: break-word;">AUDIO (VO / Dialogue / Music / SFX)</th>
+                <th style="border: 1px solid #808080; padding: 10px; text-align: left; font-weight: bold; width: 50%; word-wrap: break-word;">VISUALS (Action / Camera / Notes)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td style="border: 1px solid #808080; padding: 10px; vertical-align: top; word-wrap: break-word; white-space: normal;">🎵 <em>Upbeat, playful surf/skate punk track begins</em></td>
+                <td style="border: 1px solid #808080; padding: 10px; vertical-align: top; word-wrap: break-word; white-space: normal;">Logo animation flickers on</td>
+            </tr>
+            <tr style="background-color: #f8f8f8;">
+                <td style="border: 1px solid #808080; padding: 10px; vertical-align: top; word-wrap: break-word; white-space: normal;"><strong>Narrator (energetic, teasing):</strong> "You spoke."</td>
+                <td style="border: 1px solid #808080; padding: 10px; vertical-align: top; word-wrap: break-word; white-space: normal;">Screen fills with quick cuts of social media posts stacking up. Posts come from IG, X, Facebook, LinkedIn all posted by <strong>@Cal_E_Burrito</strong>.</td>
+            </tr>
+            <tr>
+                <td style="border: 1px solid #808080; padding: 10px; vertical-align: top; word-wrap: break-word; white-space: normal;"><strong>IG comment (on a Wahoo's post):</strong> "You're based in California… why no Cali burrito?"</td>
+                <td style="border: 1px solid #808080; padding: 10px; vertical-align: top; word-wrap: break-word; white-space: normal;">Screenshot styled like a phone capture. Pops onto screen with notification ding.</td>
+            </tr>
+            <tr style="background-color: #f8f8f8;">
+                <td style="border: 1px solid #808080; padding: 10px; vertical-align: top; word-wrap: break-word; white-space: normal;"><strong>X post:</strong> "@wahoos — you have carne asada. You have fries. Do the math."</td>
+                <td style="border: 1px solid #808080; padding: 10px; vertical-align: top; word-wrap: break-word; white-space: normal;"</td>
+            </tr>
+            <tr>
+                <td style="border: 1px solid #808080; padding: 10px; vertical-align: top; word-wrap: break-word; white-space: normal;"><strong>Facebook comment:</strong> "Come on Wahoo's, give the people what they want! Pweaaase :)"</td>
+                <td style="border: 1px solid #808080; padding: 10px; vertical-align: top; word-wrap: break-word; white-space: normal;"</td>
+            </tr>
+            <tr style="background-color: #f8f8f8;">
+                <td style="border: 1px solid #808080; padding: 10px; vertical-align: top; word-wrap: break-word; white-space: normal;"><strong>LinkedIn post:</strong> "Goddamn it, make me this burrito! @wahoos"</td>
+                <td style="border: 1px solid #808080; padding: 10px; vertical-align: top; word-wrap: break-word; white-space: normal;"></td>
+            </tr>
+            <tr>
+                <td style="border: 1px solid #808080; padding: 10px; vertical-align: top; word-wrap: break-word; white-space: normal;"><strong>Narrator (playfully dramatic):</strong> "And we listened."</td>
+                <td style="border: 1px solid #808080; padding: 10px; vertical-align: top; word-wrap: break-word; white-space: normal;">Smash cut: Hero close-up of burrito on a plate with salsa + drink. Slow spin shot. Steam rising as burrito is sliced open, fries and carne asada spilling out.</td>
+            </tr>
+            <tr style="background-color: #f8f8f8;">
+                <td style="border: 1px solid #808080; padding: 10px; vertical-align: top; word-wrap: break-word; white-space: normal;"><strong>Narrator (bright, cheeky):</strong> "Introducing Wahoo's new California Burrito. Available for a limited time… because one person wouldn't shut up about it."</td>
+                <td style="border: 1px solid #808080; padding: 10px; vertical-align: top; word-wrap: break-word; white-space: normal;">Hero product shot.</td>
+            </tr>
+            <tr>
+                <td style="border: 1px solid #808080; padding: 10px; vertical-align: top; word-wrap: break-word; white-space: normal;"><strong>Narrator (final tagline, confident):</strong> "Wahoo's. Freshly made. Pacific inspired."</td>
+                <td style="border: 1px solid #808080; padding: 10px; vertical-align: top; word-wrap: break-word; white-space: normal;">Final lock-up: Logo + burrito, surf/skate aesthetic graphics. Sun flare wipe.</td>
+            </tr>
+            <tr style="background-color: #f8f8f8;">
+                <td style="border: 1px solid #808080; padding: 10px; vertical-align: top; word-wrap: break-word; white-space: normal;">Music out</em></td>
+                <td style="border: 1px solid #808080; padding: 10px; vertical-align: top; word-wrap: break-word; white-space: normal;">Fade to black.</td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>
+                        <h4>Visual Elements</h4>
+                        <p>AI slop visuals</p>
+                        
+                        <div class="creative-gallery">
+                            <img src="images/wahoosslop.png" alt="Creative Asset 1" class="creative-image" onclick="openImageViewer('images/" alt="Creative')">
+                            <img src="images/placeholder-storyboard-2.jpg" alt="Storyboard" class="creative-image" onclick="openImageViewer('images/placeholder-storyboard-2.jpg')">
+                        </div>
+                    `
+                },
+                
+                execution: {
+                    title: "Emptyness is all consuming",
+                    content: `
+                    `
+                }
+            }
+        ];
+        
+        let currentCampaign = null;
+        
+        // Show warning dialog when page loads
+        window.addEventListener('load', function() {
+            // Show warning first
+            document.getElementById('warningDialog').classList.add('active');
+            
+            const gallery = document.getElementById('campaignGallery');
+            
+            campaigns.forEach(campaign => {
+                const campaignItem = document.createElement('div');
+                campaignItem.className = 'campaign-item';
+                campaignItem.onclick = function() { openCampaignDialog(campaign); };
+                
+                campaignItem.innerHTML = `
+                    <div class="campaign-title">${campaign.title}</div>
+                    <div class="campaign-description">${campaign.description}</div>
+                    <div class="campaign-image">
+                        <img src="${campaign.thumbnail}" alt="${campaign.title}" onerror="this.style.display='none'; this.parentNode.innerHTML='<div style=\\'color: #808080; font-size: 11px; text-align: center;\\'>Thumbnail Image<br>Placeholder</div>';">
+                    </div>
+                    <div class="campaign-tags">
+                        ${campaign.tags.map(tag => `<div class="campaign-tag">${tag}</div>`).join('')}
+                    </div>
+                `;
+                
+                gallery.appendChild(campaignItem);
+            });
+        });
+        
+        // Close warning dialog
+        function closeWarningDialog() {
+            document.getElementById('warningDialog').classList.remove('active');
+        }
+        
+        // Show campaign details with tabbed interface
+        function openCampaignDialog(campaign) {
+            currentCampaign = campaign;
+            const dialog = document.getElementById('campaignDialog');
+            const title = document.getElementById('campaignDialogTitle');
+            
+            title.textContent = campaign.title;
+            
+            // Load initial tab content (Brief)
+            switchTab('brief');
+            
+            // Reset to first tab
+            document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+            document.querySelector('.tab-button').classList.add('active');
+            
+            dialog.classList.add('active');
+        }
+        
+        function closeCampaignDialog() {
+            const dialog = document.getElementById('campaignDialog');
+            dialog.classList.remove('active');
+            currentCampaign = null;
+        }
+        
+        // Tab switching functionality
+        function switchTab(tabName) {
+            if (!currentCampaign) return;
+            
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Remove active state from all tab buttons
+            document.querySelectorAll('.tab-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected tab content
+            const selectedTab = document.getElementById(tabName + '-tab');
+            selectedTab.classList.add('active');
+            
+            // Activate selected tab button
+            event.target.classList.add('active');
+            
+            // Load content for the selected tab
+            const tabData = currentCampaign[tabName];
+            if (tabData) {
+                selectedTab.innerHTML = `<h3>${tabData.title}</h3>${tabData.content}`;
+            }
+        }
+        
+        // Image viewer functionality
+        function openImageViewer(imageSrc) {
+            const viewer = document.getElementById('imageViewer');
+            const content = document.getElementById('imageViewerContent');
+            
+            content.innerHTML = `<img src="${imageSrc}" alt="Campaign Creative">`;
+            viewer.classList.add('active');
+        }
+        
+        function closeImageViewer() {
+            const viewer = document.getElementById('imageViewer');
+            viewer.classList.remove('active');
+        }
+        
+        // Close dialogs with Escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                if (document.getElementById('imageViewer').classList.contains('active')) {
+                    closeImageViewer();
+                } else if (document.getElementById('campaignDialog').classList.contains('active')) {
+                    closeCampaignDialog();
+                } else if (document.getElementById('warningDialog').classList.contains('active')) {
+                    closeWarningDialog();
+                }
+            }
+        });
+    </script>
+    <script src="DVD-animation.js"></script>
+</body>
+</html>
