@@ -1,493 +1,434 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>The Touch Grass Collective</title>
-<style>
-body {
-  background-color: #000000;
-  color: #00ff00;
-  font-family: "Courier New", monospace;
-  margin: 0;
-  padding: 20px;
-background-image: url('./images/stars.gif');
-background-repeat: repeat;
-background-attachment: fixed;
-}
-
-h1 {
-  color: #ff00ff;
-  text-align: center;
-  font-size: 48px;
-  text-shadow: 3px 3px #00ff00;
-  letter-spacing: 3px;
-  animation: flicker 2s infinite;
-}
-
-@keyframes flicker {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.8; }
-}
-
-.container {
-  max-width: 800px;
-  margin: 0 auto;
-  background-color: #1a1a1a;
-  border: 5px solid #ff00ff;
-  padding: 20px;
-}
-
-.banner {
-  background-color: #ff00ff;
-  color: #000000;
-  padding: 10px;
-  text-align: center;
-  font-weight: bold;
-  font-size: 24px;
-  margin-bottom: 20px;
-  border: 3px dashed #00ff00;
-}
-
-.section {
-  margin: 20px 0;
-  padding: 15px;
-  border: 2px solid #00ff00;
-  background-color: #0a0a0a;
-}
-
-.section h2 {
-  color: #ffff00;
-  text-decoration: underline;
-  font-size: 28px;
-}
-
-.blink {
-  animation: blink 1s infinite;
-}
-
-@keyframes blink {
-  0%, 50%, 100% { opacity: 1; }
-  25%, 75% { opacity: 0; }
-}
-
-a {
-  color: #00ffff;
-  text-decoration: underline;
-}
-
-a:visited {
-  color: #ff00ff;
-}
-
-.submit-btn {
-  background-color: #ff00ff;
-  color: #000000;
-  padding: 15px 30px;
-  font-size: 20px;
-  font-weight: bold;
-  border: 3px solid #00ff00;
-  cursor: pointer;
-  font-family: "Courier New", monospace;
-  display: block;
-  margin: 20px auto;
-  text-align: center;
-  text-decoration: none;
-}
-
-.submit-btn:hover {
-  background-color: #00ff00;
-  color: #000000;
-  border-color: #ff00ff;
-}
-
-.divider {
-  border: 0;
-  height: 3px;
-  background-image: repeating-linear-gradient(90deg, #ff00ff 0px, #ff00ff 10px, #00ff00 10px, #00ff00 20px);
-  margin: 20px 0;
-}
-
-ul {
-  color: #00ffff;
-}
-
-.manifesto {
-  background-color: #000000;
-  border: 3px solid #ffff00;
-  padding: 15px;
-  font-size: 16px;
-  line-height: 1.6;
-}
-
-.footer {
-  text-align: center;
-  margin-top: 30px;
-  color: #808080;
-  font-size: 12px;
-}
-
-marquee {
-  color: #ffff00;
-  font-weight: bold;
-  font-size: 18px;
-}
-
-.zine-preview {
-  border: 3px dashed #ff00ff;
-  padding: 10px;
-  margin: 15px 0;
-  background-color: #050505;
-}
-
-.form-group {
-  margin: 15px 0;
-}
-
-.form-group label {
-  display: block;
-  color: #00ffff;
-  margin-bottom: 5px;
-  font-size: 16px;
-}
-
-.form-group input,
-.form-group textarea {
-  width: 95%;
-  padding: 10px;
-  background-color: #000000;
-  border: 2px solid #00ff00;
-  color: #00ff00;
-  font-family: "Courier New", monospace;
-  font-size: 14px;
-}
-
-.form-group textarea {
-  min-height: 150px;
-  resize: vertical;
-}
-
-.form-group input:focus,
-.form-group textarea:focus {
-  outline: none;
-  border-color: #ff00ff;
-}
-
-.payment-options {
-  display: flex;
-  gap: 15px;
-  justify-content: center;
-  flex-wrap: wrap;
-  margin-top: 20px;
-}
-
-.payment-btn {
-  background-color: #00ff00;
-  color: #000000;
-  padding: 12px 25px;
-  font-size: 16px;
-  font-weight: bold;
-  border: 2px solid #ff00ff;
-  cursor: pointer;
-  font-family: "Courier New", monospace;
-  text-decoration: none;
-  display: inline-block;
-}
-
-.payment-btn:hover {
-  background-color: #ffff00;
-  color: #000000;
-}
-
-.modal {
-  display: none;
-  position: fixed;
-  z-index: 1000;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0,0,0,0.9);
-}
-
-.modal-content {
-  background-color: #1a1a1a;
-  margin: 5% auto;
-  padding: 20px;
-  border: 5px solid #ff00ff;
-  width: 90%;
-  max-width: 600px;
-  max-height: 80vh;
-  overflow-y: auto;
-}
-
-.close {
-  color: #ff00ff;
-  float: right;
-  font-size: 40px;
-  font-weight: bold;
-  cursor: pointer;
-  line-height: 20px;
-}
-
-.close:hover {
-  color: #00ff00;
-}
-
-.note {
-  background-color: #ffff00;
-  color: #000000;
-  padding: 10px;
-  margin: 10px 0;
-  border: 2px solid #ff00ff;
-  font-weight: bold;
-}
-</style>
+    <link rel="stylesheet" href="theme-styles.css">
+    <script src="theme-switcher.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog</title>
+    <link rel="stylesheet" href="https://unpkg.com/98.css">
+    <style>
+        /* Base Windows 98 Styling */
+        body {
+            background: url('stars.gif') repeat;
+            background-color: #008080;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: 'MS Sans Serif', 'Segoe UI', Tahoma, sans-serif;
+            padding: 20px;
+        }
+        
+        .window {
+            width: 800px;
+            min-height: 600px;
+            position: relative;
+        }
+        
+        .window-body {
+            height: calc(100% - 58px);
+            display: flex;
+            overflow: hidden;
+        }
+        
+        /* Sidebar Navigation */
+        .sidebar {
+            width: 200px;
+            border-right: 2px solid #808080;
+            background-color: #c0c0c0;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            flex-shrink: 0;
+        }
+        
+        .sidebar-title {
+            padding: 10px;
+            background: linear-gradient(to right, #000080, #1084d0);
+            color: white;
+            font-weight: bold;
+            font-size: 12px;
+            border-bottom: 1px solid #808080;
+        }
+        
+        .blog-list {
+            flex: 1;
+            overflow-y: auto;
+        }
+        
+        .blog-item {
+            padding: 10px;
+            border-bottom: 1px solid #808080;
+            cursor: pointer;
+            font-size: 11px;
+            background-color: #c0c0c0;
+            transition: background-color 0.2s;
+        }
+        
+        .blog-item:hover {
+            background-color: #d4d4d4;
+        }
+        
+        .blog-item.active {
+            background-color: #000080;
+            color: white;
+        }
+        
+        .blog-date {
+            font-size: 9px;
+            color: #808080;
+            margin-top: 3px;
+        }
+        
+        .blog-item.active .blog-date {
+            color: #c0c0c0;
+        }
+        
+        /* Content Area */
+        .content-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background-color: #ffffff;
+            overflow: hidden;
+        }
+        
+        .blog-content {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+        
+        .blog-post {
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 20px;
+            border: 1px solid #808080;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+            margin-bottom: 20px;
+        }
+        
+        .blog-header {
+            border-bottom: 2px solid #000080;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .blog-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #000080;
+            margin-bottom: 5px;
+        }
+        
+        .blog-meta {
+            font-size: 11px;
+            color: #808080;
+        }
+        
+        .blog-body {
+            line-height: 1.6;
+            font-size: 12px;
+            color: #000000;
+        }
+        
+        .blog-body p {
+            margin-bottom: 15px;
+        }
+        
+        .blog-body img {
+            max-width: 100%;
+            height: auto;
+            margin: 15px 0;
+            border: 1px solid #808080;
+            display: block;
+        }
+        
+        .blog-body h3 {
+            color: #000080;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+        
+        /* Navigation Buttons */
+        .blog-navigation {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            background-color: #c0c0c0;
+            border-top: 1px solid #808080;
+        }
+        
+        .nav-button {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .nav-button button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        /* Image captions */
+        .image-caption {
+            font-size: 10px;
+            color: #808080;
+            font-style: italic;
+            margin-top: -10px;
+            margin-bottom: 15px;
+        }
+        
+        /* Status bar customization */
+        .status-bar-field {
+            font-size: 11px;
+        }
+    </style>
 </head>
 <body>
-
-<div class="container">
-  <h1>TOUCH GRASS COLLECTIVE</h1>
-  
-  <marquee behavior="scroll" direction="left">*** GET OFF YOUR ASS AND DO SOMETHING *** REAL LIFE HAPPENS OUTSIDE *** NO LIKES NEEDED *** MISTAKES WELCOME ***</marquee>
-  
-  <div class="banner">
-    <span class="blink">★</span> FUCK THE ALGORITHM <span class="blink">★</span>
-  </div>
-
-  <div class="section manifesto">
-    <h2>&gt;&gt; TOUCH GRASS OR DIE TRYING &lt;&lt;</h2>
-    <p>
-      <strong>THERE'S ONE WAY TO FIGHT BACK: GET OUTSIDE. LOG OFF.</strong>
-    </p>
-    <p>
-      Print media is back baby! 
-      Every time we get out and log off, we weaken these tech oligarchs ability to rule our lives. Meta Palentire Oracle Fuck 'em
-    </p>
-    <p>
-      This is a magazine. Well it is a website which will eventually be turned into a magazine and it exists to inspire activity. We're building a community of contributors and 
-      readers who feed off each other's energy. Share your stories, your art, your weird niche interests. We will then turn those items into physical print media. They can't take that away from us. Until your apartment burns down from increasing wild fires. Then your copy is lost forever. 
-    </p>
-    <p> 
-      Whatever your passion is, share it in fun and unique ways.
-    </p>
-    <p>
-      Don't have passions? Neither do I. I like graphic design, getting drunk, and yelling at my TV when some 19 year old kid drops a football. I made this because I want to be inspired. I don't have much to share yet, but I hope you do or maybe you'll be inspired to pick up something new.
-    </p>
-  </div>
-
-  <hr class="divider">
-
-  <div class="section">
-    <h2>WHAT WE WANT:</h2>
-    <p style="color: #00ffff; font-size: 18px; margin-bottom: 15px;">
-      Your stories. Your art. Your niche interests.
-    </p>
-    <ul>
-      <li>Poetry</li>
-      <li>Photography</li>
-      <li>Food blogging</li>
-      <li>Stories and fucks ups</li>
-      <li>Woodworking projects (even the ugly ones)</li>
-      <li>That weird hobby you haven't told anyone about</li>
-      <li>Anything you made or experinced that got you away from the screen</li>
-    </ul>
-    <p style="color: #ff00ff; font-weight: bold; margin-top: 15px;">
-      ALL SUBMISSIONS ARE ANONYMOUS. We don't want you forever linked to a shitty essay. And we definitly don't want you to use this to flex how sick you are. 
-    </p>
-    <p style="font-size: 14px; color: #808080;">
-      Maybe you don't have anything to share yet. That's cool—hopefully something here 
-      inspires you to pick up something new. We're all figuring it out.
-    </p>
-  </div>
-
-  <hr class="divider">
-
-  <div class="section zine-preview">
-    <h2>THE QUARTERLY ZINE:</h2>
-    <p>
-      Every three months, we compile the best submissions into a physical zine/magazine. 
-      Photocopied. Stapled. Mailed to your door like it's 1995.
-    </p>
-    <p>
-      <span style="color: #ffff00;">SUBSCRIBE:</span> $20/year (4 issues)<br>
-    </p>
-    
-    <div class="payment-options">
-      <a href="#" class="payment-btn" onclick="showSubscribeModal(); return false;">SUBSCRIBE NOW</a>
+    <div class="window">
+        <div class="title-bar">
+            <div class="title-bar-text">Blog - Tyler's Thoughts</div>
+            <div class="title-bar-controls">
+                <button aria-label="Minimize"></button>
+                <button aria-label="Maximize"></button>
+                <button aria-label="Close" onclick="window.location.href='contents.html'"></button>
+            </div>
+        </div>
+        <div class="window-body">
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <div class="sidebar-title">All Posts</div>
+                <div class="blog-list" id="blogList">
+                    <!-- Blog items will be generated by JavaScript -->
+                </div>
+            </div>
+            
+            <!-- Content Area -->
+            <div class="content-area">
+                <div class="toolbar" style="margin-bottom: 0; border-bottom: 1px solid #808080;">
+                    <button onclick="window.location.href='contents.html'">Back</button>
+                </div>
+                
+                <div class="blog-content" id="blogContent">
+                    <!-- Blog post content will be loaded here -->
+                </div>
+                
+                <!-- Navigation Buttons -->
+                <div class="blog-navigation">
+                    <div class="nav-button">
+                        <button id="prevBtn" onclick="navigateBlog(-1)">← Previous</button>
+                    </div>
+                    <div class="nav-button">
+                        <button id="nextBtn" onclick="navigateBlog(1)">Next →</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="status-bar">
+            <p class="status-bar-field"><span id="post-info">Post 1 of 4</span></p>
+            <p class="status-bar-field"></p>
+            <p class="status-bar-field">Windows 98</p>
+        </div>
     </div>
-  </div>
 
-  <hr class="divider">
-
-  <div class="section">
-    <h2>HOW TO SUBMIT:</h2>
-    <p style="color: #00ffff; margin-bottom: 15px;">
-      Three ways to get your stuff to us:
-    </p>
-    
-    <p><strong style="color: #ffff00;">OPTION 1: Email</strong><br>
-    Send your work to: <a href="mailto:submissions@touchgrasscollective.com">submissions@touchgrasscollective.com</a><br>
-    <span style="font-size: 12px; color: #808080;">(Attach photos, docs, whatever. We'll figure it out.)</span>
-    </p>
-    
-    <p><strong style="color: #ffff00;">OPTION 2: Quick Form</strong><br>
-    Use the button below for text submissions (stories, poems, essays)</p>
-    
-    <a href="#" class="submit-btn" onclick="showSubmitModal(); return false;">SUBMIT YOUR WORK</a>
-    
-    <p><strong style="color: #ffff00;">OPTION 3: File Drop</strong><br>
-    For large files/photo sets: <a href="#" onclick="alert('Coming soon! For now use email: submissions@touchgrasscollective.com'); return false;">File Upload Link</a><br>
-    <span style="font-size: 12px; color: #808080;">(We're setting up a Dropbox. Check back soon.)</span>
-    </p>
-  </div>
-
-  <hr class="divider">
-
-  <div class="section">
-    <h2>THE RULES (SORT OF):</h2>
-    <p>1. No identifying info. We'll keep you anonymous. If you want a cool pen name or submit pictures with faces you want blurred let us know</p>
-    <p>2. Keep it real. Lying is no fun.</p>
-    <p>3. Mistakes and failures are more interesting than perfection.</p>
-    <p>4. If it got you outside or making something, it counts.</p>
-    <p>5. Be chill.</p>
-  </div>
-<div class="section">
- <h2>THE FIRST EDITION:</h2>
-<p>You don't have to subscribe or pay to submit your piece. The first edition will likely be digital and if it is cool and something people like we can print and ship. I'll take a fucking loss on it just to say we tried. This isn't about money or a business. I truly think there could be major positives for people expressing themselves anonymously in a small community such as this. Where it free expression but a bit editorialized unlike some bs like yik yak or twitter</p>
-  </div>
-  <div class="banner" style="margin-top: 30px;">
-    <span class="blink">☠</span> TOUCH GRASS OR DIE TRYING <span class="blink">☠</span>
-  </div>
-
-  <div class="footer">
-    <p>
-      <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='88' height='31'%3E%3Crect width='88' height='31' fill='%23000'/%3E%3Ctext x='44' y='20' font-family='Arial' font-size='14' fill='%2300ff00' text-anchor='middle'%3EHTML%3C/text%3E%3C/svg%3E" alt="Made with HTML">
-    </p>
-    <p>Site best viewed in Netscape Navigator 4.0 or higher</p>
-    <p>Last updated: whenever we feel like it</p>
-    <p style="margin-top: 20px;">
-      <a href="#manifesto">MANIFESTO</a> | 
-      <a href="#submit">SUBMIT</a> | 
-      <a href="#zine">ZINE</a> | 
-      <a href="#contact">CONTACT</a>
-    </p>
-  </div>
-
-</div>
-
-<!-- Submit Modal -->
-<div id="submitModal" class="modal">
-  <div class="modal-content">
-    <span class="close" onclick="closeSubmitModal()">&times;</span>
-    <h2 style="color: #ff00ff;">SUBMIT YOUR WORK</h2>
-    
-    <div class="note">
-      NOTE: This form is for TEXT submissions only (stories, poems, essays). 
-      For photos/large files, email us at submissions@touchgrasscollective.com
-    </div>
-    
-    <form action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
-      <div class="form-group">
-        <label>SUBMISSION TYPE:</label>
-        <input type="text" name="type" placeholder="Story, poem, essay, rant, etc." required>
-      </div>
-      
-      <div class="form-group">
-        <label>TITLE (optional):</label>
-        <input type="text" name="title" placeholder="Or leave blank, we don't care">
-      </div>
-      
-      <div class="form-group">
-        <label>YOUR WORK:</label>
-        <textarea name="submission" placeholder="Paste your text here..." required></textarea>
-      </div>
-      
-      <div class="form-group">
-        <label>ANYTHING ELSE WE SHOULD KNOW?</label>
-        <textarea name="notes" placeholder="Context, trigger warnings, whatever..."></textarea>
-      </div>
-      
-      <input type="hidden" name="_subject" value="New Touch Grass Submission">
-      
-      <button type="submit" class="submit-btn">SEND IT</button>
-    </form>
-  </div>
-</div>
-
-<!-- Subscribe Modal -->
-<div id="subscribeModal" class="modal">
-  <div class="modal-content">
-    <span class="close" onclick="closeSubscribeModal()">&times;</span>
-    <h2 style="color: #ff00ff;">SUBSCRIBE TO THE ZINE</h2>
-    
-    <p style="color: #00ffff;">
-      $20/year gets you 4 quarterly issues mailed to your door.<br>
-      Photocopied, stapled, full of your community's real stories.
-    </p>
-    
-    <div class="note">
-      We're still setting up automated payments. For now, here's how to subscribe:
-    </div>
-    
-    <div style="margin: 20px 0;">
-      <p><strong style="color: #ffff00;">STEP 1:</strong> Send $20 via one of these:</p>
-      <div class="payment-options">
-        <a href="https://venmo.com/YOUR-HANDLE" target="_blank" class="payment-btn">VENMO</a>
-        <a href="https://paypal.me/YOUR-HANDLE" target="_blank" class="payment-btn">PAYPAL</a>
-        <a href="https://cash.app/$YOUR-HANDLE" target="_blank" class="payment-btn">CASH APP</a>
-      </div>
-      <p style="font-size: 12px; color: #808080; margin-top: 10px;">
-        (Include "ZINE SUB" in the note)
-      </p>
-    </div>
-    
-    <div style="margin: 20px 0;">
-      <p><strong style="color: #ffff00;">STEP 2:</strong> Email your mailing address to:</p>
-      <p><a href="mailto:subscribe@touchgrasscollective.com">subscribe@touchgrasscollective.com</a></p>
-    </div>
-    
-    <p style="color: #808080; font-size: 14px; margin-top: 20px;">
-      Yeah, it's manual. We'll get a proper system soon. For now, this is punk rock as hell.
-    </p>
-  </div>
-</div>
-
-<script>
-// Modal functions
-function showSubmitModal() {
-  document.getElementById('submitModal').style.display = 'block';
-}
-
-function closeSubmitModal() {
-  document.getElementById('submitModal').style.display = 'none';
-}
-
-function showSubscribeModal() {
-  document.getElementById('subscribeModal').style.display = 'block';
-}
-
-function closeSubscribeModal() {
-  document.getElementById('subscribeModal').style.display = 'none';
-}
-
-// Close modal when clicking outside of it
-window.onclick = function(event) {
-  const submitModal = document.getElementById('submitModal');
-  const subscribeModal = document.getElementById('subscribeModal');
-  if (event.target == submitModal) {
-    closeSubmitModal();
-  }
-  if (event.target == subscribeModal) {
-    closeSubscribeModal();
-  }
-}
-
-// Random color shift every few seconds for extra 90s chaos
-setInterval(function() {
-  const colors = ['#00ff00', '#00ffff', '#ffff00', '#ff00ff'];
-  const randomColor = colors[Math.floor(Math.random() * colors.length)];
-  document.querySelector('marquee').style.color = randomColor;
-}, 3000);
-</script>
-
+    <script>
+        // Blog posts data
+        const blogPosts = [
+            {
+                id: 1,
+                title: "Welcome to My Blog",
+                date: "December 1, 2024",
+                background: "stars.gif",
+                content: `
+                    <p>Hey there! Welcome to my corner of the internet. I've been wanting to start a blog for a while now, and I finally decided to just go for it. This space is going to be a mix of my thoughts on design, photography, life in California, and whatever else catches my attention.</p>
+                    
+                    <p>I've always loved the aesthetic of old operating systems - there's something charming about the simplicity and directness of Windows 98. No unnecessary animations, no bloated interfaces, just pure functionality with a bit of personality. That's what I'm going for here.</p>
+                    
+                    <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=600" alt="Workspace">
+                    <p class="image-caption">My usual workspace where most of these posts will be written</p>
+                    
+                    <h3>What to Expect</h3>
+                    <p>I'll be sharing insights from my design work, behind-the-scenes looks at projects I'm working on, photography adventures around Southern California, and maybe some musings on creativity and the creative process. I'm not trying to be an expert - just sharing my journey.</p>
+                    
+                    <p>Thanks for stopping by. I hope you find something here that resonates with you.</p>
+                `
+            },
+            {
+                id: 2,
+                title: "Chasing Light: A Photography Journey",
+                date: "December 5, 2024",
+                background: "url('https://images.unsplash.com/photo-1518837695005-2083093ee35b?w=1200') center/cover",
+                content: `
+                    <p>There's a specific feeling I get when I'm out shooting during golden hour. The world transforms into something magical - shadows stretch long across the pavement, everything glows with warmth, and ordinary scenes become extraordinary.</p>
+                    
+                    <p>Last week, I drove out to the coast just before sunset. I didn't have a particular shot in mind, I just wanted to see what I could find. Sometimes the best photography happens when you're not trying too hard, when you're just observing and reacting to what's in front of you.</p>
+                    
+                    <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600" alt="Beach sunset">
+                    <p class="image-caption">One of those perfect coastal California evenings</p>
+                    
+                    <h3>The Technical Side</h3>
+                    <p>I've been experimenting with longer exposures lately, trying to capture that dreamy, ethereal quality you see in the water. It's all about finding the right balance - too short and you lose the motion, too long and everything becomes a blur. I'm still learning, still experimenting.</p>
+                    
+                    <p>Photography for me isn't just about creating beautiful images. It's about the experience of being present, of noticing things I might otherwise walk past. It's meditation in its own way.</p>
+                    
+                    <img src="https://images.unsplash.com/photo-1452587925148-ce544e77e70d?w=600" alt="Camera gear">
+                    <p class="image-caption">My trusty gear that comes with me everywhere</p>
+                `
+            },
+            {
+                id: 3,
+                title: "Design Philosophy: Less is More (Usually)",
+                date: "December 10, 2024",
+                background: "url('https://images.unsplash.com/photo-1561070791-2526d30994b5?w=1200') center/cover",
+                content: `
+                    <p>I've been thinking a lot lately about minimalism in design. Not the sterile, personality-free kind of minimalism that feels cold and corporate, but thoughtful simplicity that serves a purpose.</p>
+                    
+                    <p>When I'm working on a project, whether it's a brand identity or a website, I always start by asking: what's the core message? What absolutely needs to be here? Everything else is negotiable.</p>
+                    
+                    <h3>The Power of Constraints</h3>
+                    <p>Working within constraints - whether it's a limited color palette, a specific grid system, or even the Windows 98 aesthetic of this site - actually makes me more creative, not less. When you can't rely on throwing every bell and whistle at a problem, you have to think more carefully about each choice.</p>
+                    
+                    <img src="https://images.unsplash.com/photo-1561998338-13ad7883b20f?w=600" alt="Design sketches">
+                    <p class="image-caption">Early sketches for a recent branding project</p>
+                    
+                    <p>But here's the thing about "less is more" - it's not a universal truth. Sometimes more IS more. Sometimes a design needs to be loud, chaotic, maximalist. The trick is knowing when to apply which approach.</p>
+                    
+                    <p>I think that's what makes design interesting - there's no formula. Every project is different, every client has different needs, and what worked brilliantly last time might fall flat this time. You have to stay flexible, stay curious.</p>
+                `
+            },
+            {
+                id: 4,
+                title: "Building This Site: A Retro Revival",
+                date: "December 15, 2024",
+                background: "url('https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=1200') center/cover",
+                content: `
+                    <p>Building this portfolio site has been such a fun project. I wanted something that felt personal, something that stood out from all the minimalist, modern portfolio sites out there. Don't get me wrong - I love a good minimal site - but I wanted to do something different.</p>
+                    
+                    <p>The Windows 98 aesthetic just clicked. It's nostalgic without being precious about it. It's functional. It's familiar. And honestly, it's just fun to look at.</p>
+                    
+                    <img src="https://images.unsplash.com/photo-1587620962725-abab7fe55159?w=600" alt="Code on screen">
+                    <p class="image-caption">Late night coding sessions fueled by coffee</p>
+                    
+                    <h3>The Technical Approach</h3>
+                    <p>I'm using the 98.css library as a foundation, which gives me all those classic Windows UI elements. From there, it's about adapting modern web development practices to work within this retro framework. CSS Grid and Flexbox for layouts, vanilla JavaScript for interactivity, and careful attention to making everything feel authentic.</p>
+                    
+                    <p>The challenge is balancing authenticity with usability. I want it to feel like Windows 98, but I don't want to recreate all the frustrations of 90s web design. So it's a careful dance between nostalgia and modern UX principles.</p>
+                    
+                    <p>If you're reading this on the actual site (as opposed to viewing the code), I hope you're enjoying the experience. And if you have thoughts or feedback, I'd love to hear them!</p>
+                `
+            }
+        ];
+        
+        let currentPostIndex = 0;
+        
+        // Initialize the blog on page load
+        window.addEventListener('load', function() {
+            generateSidebar();
+            loadBlogPost(0);
+        });
+        
+        // Generate sidebar with all blog posts
+        function generateSidebar() {
+            const blogList = document.getElementById('blogList');
+            blogList.innerHTML = '';
+            
+            blogPosts.forEach((post, index) => {
+                const blogItem = document.createElement('div');
+                blogItem.className = 'blog-item';
+                if (index === currentPostIndex) {
+                    blogItem.classList.add('active');
+                }
+                blogItem.onclick = function() { loadBlogPost(index); };
+                
+                blogItem.innerHTML = `
+                    <div>${post.title}</div>
+                    <div class="blog-date">${post.date}</div>
+                `;
+                
+                blogList.appendChild(blogItem);
+            });
+        }
+        
+        // Load a specific blog post
+        function loadBlogPost(index) {
+            if (index < 0 || index >= blogPosts.length) return;
+            
+            currentPostIndex = index;
+            const post = blogPosts[index];
+            const contentArea = document.getElementById('blogContent');
+            
+            // Update background
+            if (post.background.includes('url(')) {
+                contentArea.style.background = post.background;
+            } else {
+                contentArea.style.background = `url('${post.background}') repeat`;
+            }
+            
+            // Update content
+            contentArea.innerHTML = `
+                <div class="blog-post">
+                    <div class="blog-header">
+                        <div class="blog-title">${post.title}</div>
+                        <div class="blog-meta">Posted on ${post.date}</div>
+                    </div>
+                    <div class="blog-body">
+                        ${post.content}
+                    </div>
+                </div>
+            `;
+            
+            // Update sidebar active state
+            document.querySelectorAll('.blog-item').forEach((item, i) => {
+                if (i === index) {
+                    item.classList.add('active');
+                } else {
+                    item.classList.remove('active');
+                }
+            });
+            
+            // Update navigation buttons
+            updateNavButtons();
+            
+            // Update status bar
+            document.getElementById('post-info').textContent = `Post ${index + 1} of ${blogPosts.length}`;
+            
+            // Scroll to top of content
+            contentArea.scrollTop = 0;
+        }
+        
+        // Navigate between blog posts
+        function navigateBlog(direction) {
+            const newIndex = currentPostIndex + direction;
+            if (newIndex >= 0 && newIndex < blogPosts.length) {
+                loadBlogPost(newIndex);
+            }
+        }
+        
+        // Update navigation button states
+        function updateNavButtons() {
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            
+            prevBtn.disabled = currentPostIndex === 0;
+            nextBtn.disabled = currentPostIndex === blogPosts.length - 1;
+        }
+        
+        // Keyboard navigation
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'ArrowLeft') {
+                navigateBlog(-1);
+            } else if (event.key === 'ArrowRight') {
+                navigateBlog(1);
+            }
+        });
+    </script>
+    <script src="DVD-animation.js"></script>
 </body>
 </html>
