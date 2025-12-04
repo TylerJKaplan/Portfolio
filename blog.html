@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>The Touch Grass Collective</title>
+<style>
+body {
+  background-color: #000000;
+  color: #00ff00;
+  font-family: "Courier New", monospace;
+  margin: 0;
+  padding: 20px;
+background-image: url('./images/stars.gif');
+background-repeat: repeat;
+background-attachment: fixed;
+}
+
+h1 {
+  color: #ff00ff;
+  text-align: center;
+  font-size: 48px;
+  text-shadow: 3px 3px #00ff00;
+  letter-spacing: 3px;
+  animation: flicker 2s infinite;
+}
+
+@keyframes flicker {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.8; }
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  background-color: #1a1a1a;
+  border: 5px solid #ff00ff;
+  padding: 20px;
+}
+
+.banner {
+  background-color: #ff00ff;
+  color: #000000;
+  padding: 10px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 24px;
+  margin-bottom: 20px;
+  border: 3px dashed #00ff00;
+}
+
+.section {
+  margin: 20px 0;
+  padding: 15px;
+  border: 2px solid #00ff00;
+  background-color: #0a0a0a;
+}
+
+.section h2 {
+  color: #ffff00;
+  text-decoration: underline;
+  font-size: 28px;
+}
+
+.blink {
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  0%, 50%, 100% { opacity: 1; }
+  25%, 75% { opacity: 0; }
+}
+
+a {
+  color: #00ffff;
+  text-decoration: underline;
+}
+
+a:visited {
+  color: #ff00ff;
+}
+
+.submit-btn {
+  background-color: #ff00ff;
+  color: #000000;
+  padding: 15px 30px;
+  font-size: 20px;
+  font-weight: bold;
+  border: 3px solid #00ff00;
+  cursor: pointer;
+  font-family: "Courier New", monospace;
+  display: block;
+  margin: 20px auto;
+  text-align: center;
+  text-decoration: none;
+}
+
+.submit-btn:hover {
+  background-color: #00ff00;
+  color: #000000;
+  border-color: #ff00ff;
+}
+
+.divider {
+  border: 0;
+  height: 3px;
+  background-image: repeating-linear-gradient(90deg, #ff00ff 0px, #ff00ff 10px, #00ff00 10px, #00ff00 20px);
+  margin: 20px 0;
+}
+
+ul {
+  color: #00ffff;
+}
+
+.manifesto {
+  background-color: #000000;
+  border: 3px solid #ffff00;
+  padding: 15px;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.footer {
+  text-align: center;
+  margin-top: 30px;
+  color: #808080;
+  font-size: 12px;
+}
+
+marquee {
+  color: #ffff00;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.zine-preview {
+  border: 3px dashed #ff00ff;
+  padding: 10px;
+  margin: 15px 0;
+  background-color: #050505;
+}
+
+.form-group {
+  margin: 15px 0;
+}
+
+.form-group label {
+  display: block;
+  color: #00ffff;
+  margin-bottom: 5px;
+  font-size: 16px;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 95%;
+  padding: 10px;
+  background-color: #000000;
+  border: 2px solid #00ff00;
+  color: #00ff00;
+  font-family: "Courier New", monospace;
+  font-size: 14px;
+}
+
+.form-group textarea {
+  min-height: 150px;
+  resize: vertical;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: #ff00ff;
+}
+
+.payment-options {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.payment-btn {
+  background-color: #00ff00;
+  color: #000000;
+  padding: 12px 25px;
+  font-size: 16px;
+  font-weight: bold;
+  border: 2px solid #ff00ff;
+  cursor: pointer;
+  font-family: "Courier New", monospace;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.payment-btn:hover {
+  background-color: #ffff00;
+  color: #000000;
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.9);
+}
+
+.modal-content {
+  background-color: #1a1a1a;
+  margin: 5% auto;
+  padding: 20px;
+  border: 5px solid #ff00ff;
+  width: 90%;
+  max-width: 600px;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.close {
+  color: #ff00ff;
+  float: right;
+  font-size: 40px;
+  font-weight: bold;
+  cursor: pointer;
+  line-height: 20px;
+}
+
+.close:hover {
+  color: #00ff00;
+}
+
+.note {
+  background-color: #ffff00;
+  color: #000000;
+  padding: 10px;
+  margin: 10px 0;
+  border: 2px solid #ff00ff;
+  font-weight: bold;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h1>TOUCH GRASS COLLECTIVE</h1>
+  
+  <marquee behavior="scroll" direction="left">*** GET OFF YOUR ASS AND DO SOMETHING *** REAL LIFE HAPPENS OUTSIDE *** NO LIKES NEEDED *** MISTAKES WELCOME ***</marquee>
+  
+  <div class="banner">
+    <span class="blink">★</span> FUCK THE ALGORITHM <span class="blink">★</span>
+  </div>
+
+  <div class="section manifesto">
+    <h2>&gt;&gt; TOUCH GRASS OR DIE TRYING &lt;&lt;</h2>
+    <p>
+      <strong>THERE'S ONE WAY TO FIGHT BACK: GET OUTSIDE. LOG OFF.</strong>
+    </p>
+    <p>
+      Print media is back baby! 
+      Every time we get out and log off, we weaken these tech oligarchs ability to rule our lives. Meta Palentire Oracle Fuck 'em
+    </p>
+    <p>
+      This is a magazine. Well it is a website which will eventually be turned into a magazine and it exists to inspire activity. We're building a community of contributors and 
+      readers who feed off each other's energy. Share your stories, your art, your weird niche interests. We will then turn those items into physical print media. They can't take that away from us. Until your apartment burns down from increasing wild fires. Then your copy is lost forever. 
+    </p>
+    <p> 
+      Whatever your passion is, share it in fun and unique ways.
+    </p>
+    <p>
+      Don't have passions? Neither do I. I like graphic design, getting drunk, and yelling at my TV when some 19 year old kid drops a football. I made this because I want to be inspired. I don't have much to share yet, but I hope you do or maybe you'll be inspired to pick up something new.
+    </p>
+  </div>
+
+  <hr class="divider">
+
+  <div class="section">
+    <h2>WHAT WE WANT:</h2>
+    <p style="color: #00ffff; font-size: 18px; margin-bottom: 15px;">
+      Your stories. Your art. Your niche interests.
+    </p>
+    <ul>
+      <li>Poetry</li>
+      <li>Photography</li>
+      <li>Food blogging</li>
+      <li>Stories and fucks ups</li>
+      <li>Woodworking projects (even the ugly ones)</li>
+      <li>That weird hobby you haven't told anyone about</li>
+      <li>Anything you made or experinced that got you away from the screen</li>
+    </ul>
+    <p style="color: #ff00ff; font-weight: bold; margin-top: 15px;">
+      ALL SUBMISSIONS ARE ANONYMOUS. We don't want you forever linked to a shitty essay. And we definitly don't want you to use this to flex how sick you are. 
+    </p>
+    <p style="font-size: 14px; color: #808080;">
+      Maybe you don't have anything to share yet. That's cool—hopefully something here 
+      inspires you to pick up something new. We're all figuring it out.
+    </p>
+  </div>
+
+  <hr class="divider">
+
+  <div class="section zine-preview">
+    <h2>THE QUARTERLY ZINE:</h2>
+    <p>
+      Every three months, we compile the best submissions into a physical zine/magazine. 
+      Photocopied. Stapled. Mailed to your door like it's 1995.
+    </p>
+    <p>
+      <span style="color: #ffff00;">SUBSCRIBE:</span> $20/year (4 issues)<br>
+    </p>
+    
+    <div class="payment-options">
+      <a href="#" class="payment-btn" onclick="showSubscribeModal(); return false;">SUBSCRIBE NOW</a>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <div class="section">
+    <h2>HOW TO SUBMIT:</h2>
+    <p style="color: #00ffff; margin-bottom: 15px;">
+      Three ways to get your stuff to us:
+    </p>
+    
+    <p><strong style="color: #ffff00;">OPTION 1: Email</strong><br>
+    Send your work to: <a href="mailto:submissions@touchgrasscollective.com">submissions@touchgrasscollective.com</a><br>
+    <span style="font-size: 12px; color: #808080;">(Attach photos, docs, whatever. We'll figure it out.)</span>
+    </p>
+    
+    <p><strong style="color: #ffff00;">OPTION 2: Quick Form</strong><br>
+    Use the button below for text submissions (stories, poems, essays)</p>
+    
+    <a href="#" class="submit-btn" onclick="showSubmitModal(); return false;">SUBMIT YOUR WORK</a>
+    
+    <p><strong style="color: #ffff00;">OPTION 3: File Drop</strong><br>
+    For large files/photo sets: <a href="#" onclick="alert('Coming soon! For now use email: submissions@touchgrasscollective.com'); return false;">File Upload Link</a><br>
+    <span style="font-size: 12px; color: #808080;">(We're setting up a Dropbox. Check back soon.)</span>
+    </p>
+  </div>
+
+  <hr class="divider">
+
+  <div class="section">
+    <h2>THE RULES (SORT OF):</h2>
+    <p>1. No identifying info. We'll keep you anonymous. If you want a cool pen name or submit pictures with faces you want blurred let us know</p>
+    <p>2. Keep it real. Lying is no fun.</p>
+    <p>3. Mistakes and failures are more interesting than perfection.</p>
+    <p>4. If it got you outside or making something, it counts.</p>
+    <p>5. Be chill.</p>
+  </div>
+<div class="section">
+ <h2>THE FIRST EDITION:</h2>
+<p>You don't have to subscribe or pay to submit your piece. The first edition will likely be digital and if it is cool and something people like we can print and ship. I'll take a fucking loss on it just to say we tried. This isn't about money or a business. I truly think there could be major positives for people expressing themselves anonymously in a small community such as this. Where it free expression but a bit editorialized unlike some bs like yik yak or twitter</p>
+  </div>
+  <div class="banner" style="margin-top: 30px;">
+    <span class="blink">☠</span> TOUCH GRASS OR DIE TRYING <span class="blink">☠</span>
+  </div>
+
+  <div class="footer">
+    <p>
+      <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='88' height='31'%3E%3Crect width='88' height='31' fill='%23000'/%3E%3Ctext x='44' y='20' font-family='Arial' font-size='14' fill='%2300ff00' text-anchor='middle'%3EHTML%3C/text%3E%3C/svg%3E" alt="Made with HTML">
+    </p>
+    <p>Site best viewed in Netscape Navigator 4.0 or higher</p>
+    <p>Last updated: whenever we feel like it</p>
+    <p style="margin-top: 20px;">
+      <a href="#manifesto">MANIFESTO</a> | 
+      <a href="#submit">SUBMIT</a> | 
+      <a href="#zine">ZINE</a> | 
+      <a href="#contact">CONTACT</a>
+    </p>
+  </div>
+
+</div>
+
+<!-- Submit Modal -->
+<div id="submitModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeSubmitModal()">&times;</span>
+    <h2 style="color: #ff00ff;">SUBMIT YOUR WORK</h2>
+    
+    <div class="note">
+      NOTE: This form is for TEXT submissions only (stories, poems, essays). 
+      For photos/large files, email us at submissions@touchgrasscollective.com
+    </div>
+    
+    <form action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+      <div class="form-group">
+        <label>SUBMISSION TYPE:</label>
+        <input type="text" name="type" placeholder="Story, poem, essay, rant, etc." required>
+      </div>
+      
+      <div class="form-group">
+        <label>TITLE (optional):</label>
+        <input type="text" name="title" placeholder="Or leave blank, we don't care">
+      </div>
+      
+      <div class="form-group">
+        <label>YOUR WORK:</label>
+        <textarea name="submission" placeholder="Paste your text here..." required></textarea>
+      </div>
+      
+      <div class="form-group">
+        <label>ANYTHING ELSE WE SHOULD KNOW?</label>
+        <textarea name="notes" placeholder="Context, trigger warnings, whatever..."></textarea>
+      </div>
+      
+      <input type="hidden" name="_subject" value="New Touch Grass Submission">
+      
+      <button type="submit" class="submit-btn">SEND IT</button>
+    </form>
+  </div>
+</div>
+
+<!-- Subscribe Modal -->
+<div id="subscribeModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeSubscribeModal()">&times;</span>
+    <h2 style="color: #ff00ff;">SUBSCRIBE TO THE ZINE</h2>
+    
+    <p style="color: #00ffff;">
+      $20/year gets you 4 quarterly issues mailed to your door.<br>
+      Photocopied, stapled, full of your community's real stories.
+    </p>
+    
+    <div class="note">
+      We're still setting up automated payments. For now, here's how to subscribe:
+    </div>
+    
+    <div style="margin: 20px 0;">
+      <p><strong style="color: #ffff00;">STEP 1:</strong> Send $20 via one of these:</p>
+      <div class="payment-options">
+        <a href="https://venmo.com/YOUR-HANDLE" target="_blank" class="payment-btn">VENMO</a>
+        <a href="https://paypal.me/YOUR-HANDLE" target="_blank" class="payment-btn">PAYPAL</a>
+        <a href="https://cash.app/$YOUR-HANDLE" target="_blank" class="payment-btn">CASH APP</a>
+      </div>
+      <p style="font-size: 12px; color: #808080; margin-top: 10px;">
+        (Include "ZINE SUB" in the note)
+      </p>
+    </div>
+    
+    <div style="margin: 20px 0;">
+      <p><strong style="color: #ffff00;">STEP 2:</strong> Email your mailing address to:</p>
+      <p><a href="mailto:subscribe@touchgrasscollective.com">subscribe@touchgrasscollective.com</a></p>
+    </div>
+    
+    <p style="color: #808080; font-size: 14px; margin-top: 20px;">
+      Yeah, it's manual. We'll get a proper system soon. For now, this is punk rock as hell.
+    </p>
+  </div>
+</div>
+
+<script>
+// Modal functions
+function showSubmitModal() {
+  document.getElementById('submitModal').style.display = 'block';
+}
+
+function closeSubmitModal() {
+  document.getElementById('submitModal').style.display = 'none';
+}
+
+function showSubscribeModal() {
+  document.getElementById('subscribeModal').style.display = 'block';
+}
+
+function closeSubscribeModal() {
+  document.getElementById('subscribeModal').style.display = 'none';
+}
+
+// Close modal when clicking outside of it
+window.onclick = function(event) {
+  const submitModal = document.getElementById('submitModal');
+  const subscribeModal = document.getElementById('subscribeModal');
+  if (event.target == submitModal) {
+    closeSubmitModal();
+  }
+  if (event.target == subscribeModal) {
+    closeSubscribeModal();
+  }
+}
+
+// Random color shift every few seconds for extra 90s chaos
+setInterval(function() {
+  const colors = ['#00ff00', '#00ffff', '#ffff00', '#ff00ff'];
+  const randomColor = colors[Math.floor(Math.random() * colors.length)];
+  document.querySelector('marquee').style.color = randomColor;
+}, 3000);
+</script>
+
+</body>
+</html>
