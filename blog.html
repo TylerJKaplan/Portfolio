@@ -8,242 +8,235 @@
     <title>Blog</title>
     <link rel="stylesheet" href="https://unpkg.com/98.css">
     <style>
-        /* Base Windows 98 Styling */
+        /* Base styling */
         body {
             background: url('stars.gif') repeat;
             background-color: #008080;
             margin: 0;
             padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
             min-height: 100vh;
             font-family: 'MS Sans Serif', 'Segoe UI', Tahoma, sans-serif;
-            padding: 20px;
+            overflow: hidden;
         }
         
-        .window {
-            width: 800px;
-            min-height: 600px;
+        /* Back button fixed in corner */
+        .back-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+        }
+        
+        /* Icon view container */
+        .icon-view {
+            width: 100vw;
+            height: 100vh;
             position: relative;
+            display: block;
         }
         
-        .window-body {
-            height: calc(100% - 58px);
-            display: flex;
-            overflow: hidden;
+        .icon-view.hidden {
+            display: none;
         }
         
-        /* Sidebar Navigation */
-        .sidebar {
-            width: 200px;
-            border-right: 2px solid #808080;
-            background-color: #c0c0c0;
-            display: flex;
-            flex-direction: column;
-            overflow-y: auto;
-            flex-shrink: 0;
-        }
-        
-        .sidebar-back {
-            padding: 5px;
-            border-bottom: 1px solid #808080;
-            background-color: #c0c0c0;
-        }
-        
-        .sidebar-title {
-            padding: 10px;
-            background: linear-gradient(to right, #000080, #1084d0);
-            color: white;
-            font-weight: bold;
-            font-size: 12px;
-            border-bottom: 1px solid #808080;
-        }
-        
-        .blog-list {
-            flex: 1;
-            overflow-y: auto;
-        }
-        
-        .blog-item {
-            padding: 10px;
-            border-bottom: 1px solid #808080;
+        /* Individual blog icons */
+        .blog-icon {
+            position: absolute;
             cursor: pointer;
-            font-size: 11px;
-            background-color: #c0c0c0;
-            transition: background-color 0.2s;
+            transition: transform 0.3s ease;
+            text-align: center;
+            max-width: 150px;
         }
         
-        .blog-item:hover {
-            background-color: #d4d4d4;
+        .blog-icon:hover {
+            transform: scale(1.1) !important;
+            z-index: 10;
         }
         
-        .blog-item.active {
-            background-color: #000080;
-            color: white;
-        }
-        
-        .blog-date {
-            font-size: 9px;
-            color: #808080;
-            margin-top: 3px;
-        }
-        
-        .blog-item.active .blog-date {
-            color: #c0c0c0;
-        }
-        
-        /* Content Area */
-        .content-area {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
+        .blog-icon-image {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border: 3px solid #ffffff;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
             background-color: #ffffff;
-            overflow: hidden;
         }
         
-        .blog-content {
-            flex: 1;
-            padding: 20px;
-            overflow-y: auto;
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-        }
-        
-        .blog-post {
-            background-color: rgba(255, 255, 255, 0.95);
-            padding: 20px;
-            border: 1px solid #808080;
-            box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
-            margin-bottom: 20px;
-        }
-        
-        .blog-header {
-            border-bottom: 2px solid #000080;
-            padding-bottom: 10px;
-            margin-bottom: 15px;
-        }
-        
-        .blog-title {
-            font-size: 18px;
+        .blog-icon-title {
+            margin-top: 8px;
+            color: #ffffff;
+            font-size: 13px;
             font-weight: bold;
-            color: #000080;
-            margin-bottom: 5px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         
-        .blog-meta {
-            font-size: 11px;
+        /* Blog post view */
+        .post-view {
+            display: none;
+            width: 100vw;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 100;
+            padding: 40px;
+            box-sizing: border-box;
+        }
+        
+        .post-view.active {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .post-window {
+            width: 90%;
+            max-width: 900px;
+            height: 90%;
+            background-color: #c0c0c0;
+            border: 2px outset #ffffff;
+            box-shadow: 4px 4px 10px rgba(0,0,0,0.5);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Post window title bar */
+        .post-title-bar {
+            background: linear-gradient(to right, #000080, #1084d0);
+            color: white;
+            padding: 3px 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .post-title-text {
+            font-weight: bold;
+            font-size: 12px;
+        }
+        
+        .post-controls button {
+            width: 16px;
+            height: 14px;
+            margin-left: 2px;
+            font-size: 10px;
+            padding: 0;
+        }
+        
+        /* Post content area */
+        .post-content-wrapper {
+            flex: 1;
+            overflow-y: auto;
+            background-color: #ffffff;
+            padding: 30px;
+        }
+        
+        .post-content {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .post-header {
+            border-bottom: 3px solid #000080;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .post-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #000080;
+            margin-bottom: 8px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .post-date {
+            font-size: 12px;
             color: #808080;
         }
         
-        .blog-body {
-            line-height: 1.6;
-            font-size: 12px;
+        .post-body {
+            line-height: 1.8;
+            font-size: 14px;
             color: #000000;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         
-        .blog-body p {
-            margin-bottom: 15px;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        .post-body p {
+            margin-bottom: 20px;
         }
         
-        .blog-body img {
+        .post-body img {
             max-width: 100%;
             height: auto;
-            margin: 15px 0;
+            margin: 20px 0;
             border: 1px solid #808080;
             display: block;
         }
         
-        .blog-body h3 {
+        .post-body h3 {
             color: #000080;
-            margin-top: 20px;
-            margin-bottom: 10px;
-            font-size: 14px;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-size: 18px;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         
-        /* Navigation Buttons */
-        .blog-navigation {
+        .image-caption {
+            font-size: 11px;
+            color: #808080;
+            font-style: italic;
+            margin-top: -15px;
+            margin-bottom: 20px;
+        }
+        
+        /* Navigation footer */
+        .post-navigation {
             display: flex;
             justify-content: space-between;
             padding: 10px;
             background-color: #c0c0c0;
-            border-top: 1px solid #808080;
+            border-top: 2px solid #808080;
         }
         
-        .nav-button {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-        
-        .nav-button button:disabled {
+        .post-navigation button:disabled {
             opacity: 0.5;
-            cursor: not-allowed;
-        }
-        
-        /* Image captions */
-        .image-caption {
-            font-size: 10px;
-            color: #808080;
-            font-style: italic;
-            margin-top: -10px;
-            margin-bottom: 15px;
-        }
-        
-        /* Status bar customization */
-        .status-bar-field {
-            font-size: 11px;
         }
     </style>
 </head>
 <body>
-    <div class="window">
-        <div class="title-bar">
-            <div class="title-bar-text">Blog - Tyler's Thoughts</div>
-            <div class="title-bar-controls">
-                <button aria-label="Minimize"></button>
-                <button aria-label="Maximize"></button>
-                <button aria-label="Close" onclick="window.location.href='contents.html'"></button>
-            </div>
-        </div>
-        <div class="window-body">
-            <!-- Sidebar -->
-            <div class="sidebar">
-                <div class="sidebar-back">
-                    <button onclick="window.location.href='contents.html'">Back</button>
-                </div>
-                <div class="sidebar-title">All Posts</div>
-                <div class="blog-list" id="blogList">
-                    <!-- Blog items will be generated by JavaScript -->
+    <!-- Back Button -->
+    <div class="back-button">
+        <button onclick="window.location.href='contents.html'">← Back</button>
+    </div>
+    
+    <!-- Icon View -->
+    <div class="icon-view" id="iconView">
+        <!-- Blog icons will be generated here -->
+    </div>
+    
+    <!-- Post View -->
+    <div class="post-view" id="postView">
+        <div class="post-window">
+            <div class="post-title-bar">
+                <span class="post-title-text" id="postWindowTitle">Blog Post</span>
+                <div class="post-controls">
+                    <button onclick="closePost()">✕</button>
                 </div>
             </div>
             
-            <!-- Content Area -->
-            <div class="content-area">
-                <div class="blog-content" id="blogContent">
-                    <!-- Blog post content will be loaded here -->
-                </div>
-                
-                <!-- Navigation Buttons -->
-                <div class="blog-navigation">
-                    <div class="nav-button">
-                        <button id="prevBtn" onclick="navigateBlog(-1)">← Previous</button>
-                    </div>
-                    <div class="nav-button">
-                        <button id="nextBtn" onclick="navigateBlog(1)">Next →</button>
-                    </div>
+            <div class="post-content-wrapper">
+                <div class="post-content" id="postContent">
+                    <!-- Post content loads here -->
                 </div>
             </div>
-        </div>
-        <div class="status-bar">
-            <p class="status-bar-field"><span id="post-info">Post 1 of 4</span></p>
-            <p class="status-bar-field"></p>
-            <p class="status-bar-field">Windows 98</p>
+            
+            <div class="post-navigation">
+                <button id="prevPostBtn" onclick="navigatePost(-1)">← Previous</button>
+                <button onclick="closePost()">Close</button>
+                <button id="nextPostBtn" onclick="navigatePost(1)">Next →</button>
+            </div>
         </div>
     </div>
 
@@ -254,7 +247,8 @@
                 id: 1,
                 title: "Welcome to My Blog",
                 date: "December 1, 2024",
-                background: "stars.gif",
+                icon: "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=200",
+                position: { top: '15%', left: '10%', rotation: -5 },
                 content: `
                     <p>Hey there! Welcome to my corner of the internet. I've been wanting to start a blog for a while now, and I finally decided to just go for it. This space is going to be a mix of my thoughts on design, photography, life in California, and whatever else catches my attention.</p>
                     
@@ -271,9 +265,10 @@
             },
             {
                 id: 2,
-                title: "Chasing Light: A Photography Journey",
+                title: "Chasing Light",
                 date: "December 5, 2024",
-                background: "url('https://images.unsplash.com/photo-1518837695005-2083093ee35b?w=1200') center/cover",
+                icon: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=200",
+                position: { top: '60%', left: '70%', rotation: 8 },
                 content: `
                     <p>There's a specific feeling I get when I'm out shooting during golden hour. The world transforms into something magical - shadows stretch long across the pavement, everything glows with warmth, and ordinary scenes become extraordinary.</p>
                     
@@ -293,9 +288,10 @@
             },
             {
                 id: 3,
-                title: "Design Philosophy: Less is More (Usually)",
+                title: "Design Philosophy",
                 date: "December 10, 2024",
-                background: "url('https://images.unsplash.com/photo-1561070791-2526d30994b5?w=1200') center/cover",
+                icon: "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=200",
+                position: { top: '25%', left: '65%', rotation: -12 },
                 content: `
                     <p>I've been thinking a lot lately about minimalism in design. Not the sterile, personality-free kind of minimalism that feels cold and corporate, but thoughtful simplicity that serves a purpose.</p>
                     
@@ -314,9 +310,10 @@
             },
             {
                 id: 4,
-                title: "Building This Site: A Retro Revival",
+                title: "Building This Site",
                 date: "December 15, 2024",
-                background: "url('https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=1200') center/cover",
+                icon: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=200",
+                position: { top: '50%', left: '20%', rotation: 15 },
                 content: `
                     <p>Building this portfolio site has been such a fun project. I wanted something that felt personal, something that stood out from all the minimalist, modern portfolio sites out there. Don't get me wrong - I love a good minimal site - but I wanted to do something different.</p>
                     
@@ -335,106 +332,97 @@
             }
         ];
         
-        let currentPostIndex = 0;
+        let currentPostIndex = -1;
         
-        // Initialize the blog on page load
+        // Initialize page
         window.addEventListener('load', function() {
-            generateSidebar();
-            loadBlogPost(0);
+            generateIconView();
         });
         
-        // Generate sidebar with all blog posts
-        function generateSidebar() {
-            const blogList = document.getElementById('blogList');
-            blogList.innerHTML = '';
+        // Generate scattered icon view
+        function generateIconView() {
+            const iconView = document.getElementById('iconView');
+            iconView.innerHTML = '';
             
             blogPosts.forEach((post, index) => {
-                const blogItem = document.createElement('div');
-                blogItem.className = 'blog-item';
-                if (index === currentPostIndex) {
-                    blogItem.classList.add('active');
-                }
-                blogItem.onclick = function() { loadBlogPost(index); };
+                const iconEl = document.createElement('div');
+                iconEl.className = 'blog-icon';
+                iconEl.style.top = post.position.top;
+                iconEl.style.left = post.position.left;
+                iconEl.style.transform = `rotate(${post.position.rotation}deg)`;
+                iconEl.onclick = function() { openPost(index); };
                 
-                blogItem.innerHTML = `
-                    <div>${post.title}</div>
-                    <div class="blog-date">${post.date}</div>
+                iconEl.innerHTML = `
+                    <img src="${post.icon}" alt="${post.title}" class="blog-icon-image">
+                    <div class="blog-icon-title">${post.title}</div>
                 `;
                 
-                blogList.appendChild(blogItem);
+                iconView.appendChild(iconEl);
             });
         }
         
-        // Load a specific blog post
-        function loadBlogPost(index) {
-            if (index < 0 || index >= blogPosts.length) return;
-            
+        // Open a blog post
+        function openPost(index) {
             currentPostIndex = index;
             const post = blogPosts[index];
-            const contentArea = document.getElementById('blogContent');
             
-            // Update background
-            if (post.background.includes('url(')) {
-                contentArea.style.background = post.background;
-            } else {
-                contentArea.style.background = `url('${post.background}') repeat`;
-            }
+            // Hide icon view
+            document.getElementById('iconView').classList.add('hidden');
+            
+            // Show post view
+            const postView = document.getElementById('postView');
+            postView.classList.add('active');
             
             // Update content
-            contentArea.innerHTML = `
-                <div class="blog-post">
-                    <div class="blog-header">
-                        <div class="blog-title">${post.title}</div>
-                        <div class="blog-meta">Posted on ${post.date}</div>
-                    </div>
-                    <div class="blog-body">
-                        ${post.content}
-                    </div>
+            document.getElementById('postWindowTitle').textContent = post.title;
+            document.getElementById('postContent').innerHTML = `
+                <div class="post-header">
+                    <div class="post-title">${post.title}</div>
+                    <div class="post-date">${post.date}</div>
+                </div>
+                <div class="post-body">
+                    ${post.content}
                 </div>
             `;
-            
-            // Update sidebar active state
-            document.querySelectorAll('.blog-item').forEach((item, i) => {
-                if (i === index) {
-                    item.classList.add('active');
-                } else {
-                    item.classList.remove('active');
-                }
-            });
             
             // Update navigation buttons
             updateNavButtons();
             
-            // Update status bar
-            document.getElementById('post-info').textContent = `Post ${index + 1} of ${blogPosts.length}`;
-            
-            // Scroll to top of content
-            contentArea.scrollTop = 0;
+            // Scroll to top
+            document.querySelector('.post-content-wrapper').scrollTop = 0;
         }
         
-        // Navigate between blog posts
-        function navigateBlog(direction) {
+        // Close post view
+        function closePost() {
+            document.getElementById('postView').classList.remove('active');
+            document.getElementById('iconView').classList.remove('hidden');
+            currentPostIndex = -1;
+        }
+        
+        // Navigate between posts
+        function navigatePost(direction) {
             const newIndex = currentPostIndex + direction;
             if (newIndex >= 0 && newIndex < blogPosts.length) {
-                loadBlogPost(newIndex);
+                openPost(newIndex);
             }
         }
         
         // Update navigation button states
         function updateNavButtons() {
-            const prevBtn = document.getElementById('prevBtn');
-            const nextBtn = document.getElementById('nextBtn');
-            
-            prevBtn.disabled = currentPostIndex === 0;
-            nextBtn.disabled = currentPostIndex === blogPosts.length - 1;
+            document.getElementById('prevPostBtn').disabled = currentPostIndex === 0;
+            document.getElementById('nextPostBtn').disabled = currentPostIndex === blogPosts.length - 1;
         }
         
         // Keyboard navigation
         document.addEventListener('keydown', function(event) {
-            if (event.key === 'ArrowLeft') {
-                navigateBlog(-1);
-            } else if (event.key === 'ArrowRight') {
-                navigateBlog(1);
+            if (document.getElementById('postView').classList.contains('active')) {
+                if (event.key === 'ArrowLeft') {
+                    navigatePost(-1);
+                } else if (event.key === 'ArrowRight') {
+                    navigatePost(1);
+                } else if (event.key === 'Escape') {
+                    closePost();
+                }
             }
         });
     </script>
