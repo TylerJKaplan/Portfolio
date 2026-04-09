@@ -811,6 +811,11 @@
                 image: "images/jesus.jpg" 
             },
         ];
+
+        for (let i = photoData.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [photoData[i], photoData[j]] = [photoData[j], photoData[i]];
+        }
         
         // Navigation state
         let currentPhotoIndex = 0;
